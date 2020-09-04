@@ -1,11 +1,4 @@
 node_modules
-.sewing-kit
 .DS_STORE
-build
 dist
-*.mjs
-*.esnext
-*.js
-*.d.ts
-*.log
 coverage/
