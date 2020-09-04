@@ -6,6 +6,7 @@
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
   "scripts": {
+    "test": "sk test",
     "build": "tsc --p tsconfig.json"
   },
   "publishConfig": {
@@ -42,7 +43,8 @@
     "@types/koa": "^2.0.0",
     "@types/koa-compose": "*",
     "@types/safe-compare": "^1.1.0",
-    "koa": "^2.5.0"
+    "koa": "^2.5.0",
+    "node-fetch": "^2.6.0"
   },
   "sideEffects": false,
   "files": [
