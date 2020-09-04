@@ -13,10 +13,6 @@ jobs:
         uses: CultureHQ/actions-yarn@master
         with:
           args: lint
-      - name: Type-Check
-        uses: CultureHQ/actions-yarn@master
-        with:
-          args: type-check
   test:
     runs-on: ubuntu-latest
     steps:
