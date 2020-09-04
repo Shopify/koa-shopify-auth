@@ -31,20 +31,14 @@
     "tslib": "^1.9.3"
   },
   "devDependencies": {
-    "@sewing-kit/cli": "^0.1.6",
-    "@sewing-kit/config": "^0.1.5",
-    "@sewing-kit/plugin-eslint": "^0.1.4",
-    "@sewing-kit/plugin-javascript": "^0.1.16",
-    "@sewing-kit/plugin-jest": "^0.1.19",
-    "@sewing-kit/plugin-package-flexible-outputs": "^0.1.19",
-    "@sewing-kit/plugin-typescript": "^0.1.19",
     "@shopify/jest-dom-mocks": "^2.9.1",
     "@shopify/jest-koa-mocks": "^2.2.3",
     "@types/koa": "^2.0.0",
     "@types/koa-compose": "*",
     "@types/safe-compare": "^1.1.0",
     "koa": "^2.5.0",
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^2.6.0",
+    "tsc": "^1.20150623.0"
   },
   "sideEffects": false,
   "files": [
