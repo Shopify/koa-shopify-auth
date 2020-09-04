@@ -1,0 +1,52 @@
+{
+  "name": "@shopify/koa-shopify-auth",
+  "version": "3.1.68",
+  "license": "MIT",
+  "description": "Middleware to authenticate a Koa application with Shopify",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "scripts": {
+    "build": "tsc --p tsconfig.json"
+  },
+  "publishConfig": {
+    "access": "public",
+    "@shopify:registry": "https://registry.npmjs.org"
+  },
+  "author": "Shopify Inc.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shopify/quilt.git",
+    "directory": "packages/koa-shopify-auth"
+  },
+  "bugs": {
+    "url": "https://github.com/Shopify/quilt/issues"
+  },
+  "homepage": "https://github.com/Shopify/quilt/blob/master/packages/koa-shopify-auth/README.md",
+  "dependencies": {
+    "@shopify/network": "^1.5.0",
+    "koa-compose": ">=3.0.0 <4.0.0",
+    "nonce": "^1.0.4",
+    "safe-compare": "^1.1.2",
+    "tslib": "^1.9.3"
+  },
+  "devDependencies": {
+    "@sewing-kit/cli": "^0.1.6",
+    "@sewing-kit/config": "^0.1.5",
+    "@sewing-kit/plugin-eslint": "^0.1.4",
+    "@sewing-kit/plugin-javascript": "^0.1.16",
+    "@sewing-kit/plugin-jest": "^0.1.19",
+    "@sewing-kit/plugin-package-flexible-outputs": "^0.1.19",
+    "@sewing-kit/plugin-typescript": "^0.1.19",
+    "@shopify/jest-dom-mocks": "^2.9.1",
+    "@shopify/jest-koa-mocks": "^2.2.3",
+    "@types/koa": "^2.0.0",
+    "@types/koa-compose": "*",
+    "@types/safe-compare": "^1.1.0",
+    "koa": "^2.5.0"
+  },
+  "sideEffects": false,
+  "files": [
+    "dist/*",
+    "!tsconfig.tsbuildinfo"
+  ]
+}
