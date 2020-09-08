@@ -7,6 +7,15 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- ## [Unreleased] -->
 
+## [3.1.70] - 2020-09-08
+
+- No changes from 3.1.68
+- Moved to standalone repository
+
+## [3.1.69] - 2020-09-08
+
+- Bad release. Please use 3.1.70 instead.
+
 ## [3.1.68] - 2020-08-26
 
 - Wrap `encodeURI` values in double quotes [1613](https://github.com/Shopify/quilt/pull/1613)
