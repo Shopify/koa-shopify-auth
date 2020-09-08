@@ -8,7 +8,8 @@
   "scripts": {
     "test": "jest",
     "build": "tsc",
-    "lint": "eslint"
+    "lint": "eslint",
+    "prepublishOnly": "yarn run build"
   },
   "publishConfig": {
     "access": "public"
