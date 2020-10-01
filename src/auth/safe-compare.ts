@@ -15,5 +15,5 @@ export default function safeCompare(stringA: string, stringB: string) {
     const buffB = Buffer.alloc(bLen, 0, 'utf8');
     buffB.write(stringB);
 
-    return crypto.timingSafeEqual(buffA, buffB) && aLen === bLen;
+    return crypto.timingSafeEqual(buffA, buffB);
 }
