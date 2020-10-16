@@ -7,9 +7,13 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-## [3.1.71] - 2020-10-16
+## [3.1.72] - 2020-10-16
 
 - Removes `safe-compare` as a dependency, preferring Node's `crypto.timingSafeEqual` [1470](https://github.com/Shopify/quilt/pull/1470) | [2](https://github.com/Shopify/koa-shopify-auth/issues/2)
+
+## [3.1.71] - 2020-10-16
+
+- Bad release (misaligned tags). Please use `3.1.72` instead.
 
 ## [3.1.70] - 2020-09-08
 
