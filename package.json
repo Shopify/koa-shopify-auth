@@ -1,6 +1,6 @@
 {
   "name": "@shopify/koa-shopify-auth",
-  "version": "3.1.70",
+  "version": "3.1.72",
   "license": "MIT",
   "description": "Middleware to authenticate a Koa application with Shopify",
   "main": "dist/src/index.js",
@@ -9,7 +9,9 @@
     "test": "jest",
     "build": "tsc",
     "lint": "eslint",
-    "prepublishOnly": "yarn run build"
+    "prepublishOnly": "yarn run build",
+    "preversion": "yarn test",
+    "postversion": "git push origin master --follow-tags && echo \"Log in to shipit to deploy version $npm_package_version\""
   },
   "publishConfig": {
     "access": "public"
@@ -27,7 +29,6 @@
     "@shopify/network": "^1.5.0",
     "koa-compose": ">=3.0.0 <4.0.0",
     "nonce": "^1.0.4",
-    "safe-compare": "^1.1.2",
     "tslib": "^1.9.3"
   },
   "devDependencies": {
@@ -35,7 +36,7 @@
     "@shopify/jest-koa-mocks": "^2.2.3",
     "@types/koa": "^2.0.0",
     "@types/koa-compose": "*",
-    "@types/safe-compare": "^1.1.0",
+    "@types/node": "^14.11.2",
     "babel-preset-shopify": "^21.0.0",
     "eslint": "^7.8.1",
     "jest": "^26.4.2",
