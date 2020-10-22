@@ -6,9 +6,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-### Added
 
 - Provide user data via Koa Session
++ Changed credential validation to GET request
 
 ## [3.1.72] - 2020-10-16
 
