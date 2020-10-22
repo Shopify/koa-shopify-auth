@@ -2,6 +2,7 @@ import querystring from 'querystring';
 
 import {createMockContext} from '@shopify/jest-koa-mocks';
 import {fetch as fetchMock} from '@shopify/jest-dom-mocks';
+import {StatusCode} from '@shopify/network';
 
 import createOAuthCallback from '../create-oauth-callback';
 import {AuthConfig} from '../../types';
@@ -152,23 +153,20 @@ describe('OAuthCallback', () => {
     const {secret, apiKey} = baseConfig;
     const {code} = queryData;
 
-    expect(fetchMock.lastCall()).toStrictEqual([
-      'https://shop1.myshopify.io/admin/oauth/access_token',
-      {
-        body: querystring.stringify({
-          code,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          client_id: apiKey,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          client_secret: secret,
-        }),
-        headers: {
-          'Content-Length': '50',
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        method: 'POST',
-      },
-    ]);
+    fetchMock.mock(`https://shop1.myshopify.io/admin/metafields.json`, StatusCode.Ok);
+    const lastCall = fetchMock.lastCall()
+    const lastUrl = lastCall[0]
+    const lastReq = lastCall[1]
+    expect(lastUrl).toEqual('https://shop1.myshopify.io/admin/oauth/access_token')
+    expect(lastReq.method).toEqual('POST')
+    expect(lastReq.body).toEqual(querystring.stringify({
+        code,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        client_id: apiKey,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        client_secret: secret,
+      })
+    )
   });
 
   it('throws a 401 if the token request fails', async () => {

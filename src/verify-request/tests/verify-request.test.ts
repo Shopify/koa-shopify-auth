@@ -8,7 +8,7 @@ import {TEST_COOKIE_NAME, TOP_LEVEL_OAUTH_COOKIE_NAME} from '../../index';
 const TEST_SHOP = 'testshop.myshopify.com';
 
 describe('verifyRequest', () => {
-  afterEach(fetch.restore);
+  afterEach(() => fetch.restore());
 
   describe('when there is an accessToken and shop in session', () => {
     it('calls next', async () => {
@@ -47,6 +47,7 @@ describe('verifyRequest', () => {
       });
       const next = jest.fn();
 
+      fetch.mock(metaFieldsUrl(TEST_SHOP), StatusCode.Ok);
       verifyRequestMiddleware(ctx, next);
 
       expect(ctx.cookies.set).toHaveBeenCalledWith(TOP_LEVEL_OAUTH_COOKIE_NAME);
@@ -97,6 +98,7 @@ describe('verifyRequest', () => {
       const ctx = createMockContext({});
       const next = jest.fn();
 
+      fetch.mock(metaFieldsUrl(TEST_SHOP), StatusCode.Ok);
       verifyRequestMiddleware(ctx, next);
 
       expect(ctx.cookies.set).toHaveBeenCalledWith(TEST_COOKIE_NAME, '1');
@@ -112,6 +114,7 @@ describe('verifyRequest', () => {
         redirect: jest.fn(),
       });
 
+      fetch.mock(metaFieldsUrl(TEST_SHOP), StatusCode.Ok);
       verifyRequestMiddleware(ctx, next);
 
       expect(ctx.redirect).toHaveBeenCalledWith(`/auth?shop=${shop}`);
@@ -125,6 +128,7 @@ describe('verifyRequest', () => {
         redirect: jest.fn(),
       });
 
+      fetch.mock(metaFieldsUrl(TEST_SHOP), StatusCode.Ok);
       verifyRequestMiddleware(ctx, next);
 
       expect(ctx.redirect).toHaveBeenCalledWith(`/auth`);
@@ -141,6 +145,7 @@ describe('verifyRequest', () => {
         redirect: jest.fn(),
       });
 
+      fetch.mock(metaFieldsUrl(TEST_SHOP), StatusCode.Ok);
       verifyRequestMiddleware(ctx, next);
 
       expect(ctx.redirect).toHaveBeenCalledWith(`${authRoute}?shop=${shop}`);
@@ -155,6 +160,7 @@ describe('verifyRequest', () => {
         redirect: jest.fn(),
       });
 
+      fetch.mock(metaFieldsUrl(TEST_SHOP), StatusCode.Ok);
       verifyRequestMiddleware(ctx, next);
 
       expect(ctx.redirect).toHaveBeenCalledWith(fallbackRoute);

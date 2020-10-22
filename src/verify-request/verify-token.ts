@@ -21,7 +21,7 @@ export function verifyToken(routes: Routes) {
       const response = await fetch(
         `https://${session.shop}/admin/metafields.json`,
         {
-          method: Method.Post,
+          method: Method.Get,
           headers: {
             [Header.ContentType]: 'application/json',
             'X-Shopify-Access-Token': session.accessToken,
