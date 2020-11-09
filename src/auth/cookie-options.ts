@@ -7,7 +7,7 @@ export default function getCookieOptions(ctx: Context) {
   let cookieOptions = {};
   if (isChrome) {
     cookieOptions = {
-      sameSite: 'none',
+      sameSite: 'strict',
       secure: true,
     };
   }
