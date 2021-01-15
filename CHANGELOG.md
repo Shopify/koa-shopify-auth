@@ -7,6 +7,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 ### Added
+- [Feature] Start using the new Shopify library instead of implementing all of the server-side functions
 
 ## [3.2.0] - 2020-12-01
 - [Feature] Add missing associated user data to the session [23](https://github.com/Shopify/koa-shopify-auth/pull/23)

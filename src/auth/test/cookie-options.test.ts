@@ -1,3 +1,4 @@
+import '../../test/test_helper';
 import {createMockContext} from '@shopify/jest-koa-mocks';
 
 import getCookieOptions from '../cookie-options';

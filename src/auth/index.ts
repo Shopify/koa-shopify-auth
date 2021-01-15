@@ -2,19 +2,19 @@ import {Context} from 'koa';
 
 import {OAuthStartOptions, AccessMode, NextFunction} from '../types';
 
-import createOAuthStart from './create-oauth-start';
-import createOAuthCallback from './create-oauth-callback';
+import getCookieOptions from './cookie-options';
 import createEnableCookies from './create-enable-cookies';
 import createTopLevelOAuthRedirect from './create-top-level-oauth-redirect';
 import createRequestStorageAccess from './create-request-storage-access';
+
+import Shopify from '@shopify/shopify-api';
 
 const DEFAULT_MYSHOPIFY_DOMAIN = 'myshopify.com';
 const DEFAULT_ACCESS_MODE: AccessMode = 'online';
 
 export const TOP_LEVEL_OAUTH_COOKIE_NAME = 'shopifyTopLevelOAuth';
 export const TEST_COOKIE_NAME = 'shopifyTestCookie';
-export const GRANTED_STORAGE_ACCESS_COOKIE_NAME =
-  'shopify.granted_storage_access';
+export const GRANTED_STORAGE_ACCESS_COOKIE_NAME = 'shopify.granted_storage_access';
 
 function hasCookieAccess({cookies}: Context) {
   return Boolean(cookies.get(TEST_COOKIE_NAME));
@@ -42,9 +42,6 @@ export default function createShopifyAuth(options: OAuthStartOptions) {
   const oAuthStartPath = `${prefix}/auth`;
   const oAuthCallbackPath = `${oAuthStartPath}/callback`;
 
-  const oAuthStart = createOAuthStart(config, oAuthCallbackPath);
-  const oAuthCallback = createOAuthCallback(config);
-
   const inlineOAuthPath = `${prefix}/auth/inline`;
   const topLevelOAuthRedirect = createTopLevelOAuthRedirect(
     config.apiKey,
@@ -71,7 +68,20 @@ export default function createShopifyAuth(options: OAuthStartOptions) {
       ctx.path === inlineOAuthPath ||
       (ctx.path === oAuthStartPath && shouldPerformInlineOAuth(ctx))
     ) {
-      await oAuthStart(ctx);
+      const shop = ctx.query.shop;
+      if (shop == null) {
+        ctx.throw(400);
+      }
+
+      ctx.cookies.set(TOP_LEVEL_OAUTH_COOKIE_NAME, '', getCookieOptions(ctx));
+      const redirectUrl = await Shopify.Auth.OAuth.beginAuth(
+        ctx.req,
+        ctx.res,
+        shop,
+        oAuthCallbackPath,
+        config.accessMode === 'online'
+      );
+      ctx.redirect(redirectUrl);
       return;
     }
 
@@ -81,7 +91,30 @@ export default function createShopifyAuth(options: OAuthStartOptions) {
     }
 
     if (ctx.path === oAuthCallbackPath) {
-      await oAuthCallback(ctx);
+      try {
+        await Shopify.Auth.OAuth.validateAuthCallback(ctx.req, ctx.res, ctx.query);
+
+        ctx.state.shopify = {
+          shop: ctx.query.shop,
+        };
+
+        if (config.afterAuth) {
+          await config.afterAuth(ctx);
+        }
+      }
+      catch (e) {
+        switch (true) {
+          case (e instanceof Shopify.Errors.InvalidOAuthError):
+            ctx.throw(400, e.message);
+            break;
+          case (e instanceof Shopify.Errors.SessionNotFound):
+            ctx.throw(403, e.message);
+            break;
+          default:
+            ctx.throw(500, e.message);
+            break;
+        }
+      }
       return;
     }
 
@@ -95,4 +128,3 @@ export default function createShopifyAuth(options: OAuthStartOptions) {
 }
 
 export {default as Error} from './errors';
-export {default as validateHMAC} from './validate-hmac';

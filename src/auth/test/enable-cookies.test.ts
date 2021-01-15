@@ -1,3 +1,4 @@
+import '../../test/test_helper';
 import querystring from 'querystring';
 
 import {createMockContext} from '@shopify/jest-koa-mocks';

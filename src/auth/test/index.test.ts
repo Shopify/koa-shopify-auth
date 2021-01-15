@@ -1,8 +1,16 @@
+import '../../test/test_helper';
+
+// Mock out the entire Shopify lib responses here so we don't have to deal with cookies and the underlying request
+// modules
+jest.mock('@shopify/shopify-api');
+import Shopify from '@shopify/shopify-api';
+
 import {createMockContext} from '@shopify/jest-koa-mocks';
+import querystring from 'querystring';
+import crypto from 'crypto';
 
 import createShopifyAuth from '../index';
 import createTopLevelOAuthRedirect from '../create-top-level-oauth-redirect';
-import createRequestStorageAccess from '../create-request-storage-access';
 import {OAuthStartOptions} from '../../types';
 
 const mockTopLevelOAuthRedirect = jest.fn();
@@ -15,16 +23,11 @@ jest.mock('../create-request-storage-access', () => () =>
   mockRequestStorageAccess,
 );
 
-const mockOAuthStart = jest.fn();
-jest.mock('../create-oauth-start', () => () => mockOAuthStart);
-
-const mockOAuthCallback = jest.fn();
-jest.mock('../create-oauth-callback', () => () => mockOAuthCallback);
-
 const mockEnableCookies = jest.fn();
 jest.mock('../create-enable-cookies', () => () => mockEnableCookies);
 
-const baseUrl = 'myapp.com/auth';
+const baseUrl = 'https://myapp.com/auth';
+const shop = 'test-shop.myshopify.io';
 
 const baseConfig: OAuthStartOptions = {
   apiKey: 'myapikey',
@@ -36,12 +39,16 @@ const baseConfig: OAuthStartOptions = {
 function nextFunction() {}
 
 describe('Index', () => {
+  beforeEach(() => {
+    Shopify.Auth.OAuth.beginAuth = jest.fn(() => Promise.resolve(`https://${shop}/auth/callback`));
+  });
+
   describe('with the /auth path', () => {
     describe('with no test cookie', () => {
       it('redirects to request storage access', async () => {
         const shopifyAuth = createShopifyAuth(baseConfig);
         const ctx = createMockContext({
-          url: `https://${baseUrl}`,
+          url: baseUrl,
         });
 
         await shopifyAuth(ctx, nextFunction);
@@ -54,7 +61,7 @@ describe('Index', () => {
       it('redirects to /auth/inline at the top-level', async () => {
         const shopifyAuth = createShopifyAuth(baseConfig);
         const ctx = createMockContext({
-          url: `https://${baseUrl}`,
+          url: baseUrl,
           cookies: {'shopify.granted_storage_access': '1'},
         });
 
@@ -72,7 +79,7 @@ describe('Index', () => {
       it('redirects to /auth/inline at the top-level', async () => {
         const shopifyAuth = createShopifyAuth(baseConfig);
         const ctx = createMockContext({
-          url: `https://${baseUrl}`,
+          url: baseUrl,
           cookies: {shopifyTestCookie: '1'},
         });
 
@@ -90,13 +97,15 @@ describe('Index', () => {
       it('performs inline oauth', async () => {
         const shopifyAuth = createShopifyAuth(baseConfig);
         const ctx = createMockContext({
-          url: `https://${baseUrl}`,
+          url: `${baseUrl}?shop=${shop}`,
           cookies: {shopifyTestCookie: '1', shopifyTopLevelOAuth: '1'},
         });
 
         await shopifyAuth(ctx, nextFunction);
+        expect(ctx.redirect).toHaveBeenCalledTimes(1);
 
-        expect(mockOAuthStart).toHaveBeenCalledWith(ctx);
+        const url = new URL((ctx.redirect as jest.Mock).mock.calls[0][0]);
+        expect(url.hostname).toEqual(shop);
       });
     });
   });
@@ -105,33 +114,123 @@ describe('Index', () => {
     it('performs inline oauth', async () => {
       const shopifyAuth = createShopifyAuth(baseConfig);
       const ctx = createMockContext({
-        url: `https://${baseUrl}/inline`,
+        url: `${baseUrl}/inline?shop=${shop}`,
+      });
+
+      await shopifyAuth(ctx, nextFunction);
+      expect(ctx.redirect).toHaveBeenCalledTimes(1);
+
+      const url = new URL((ctx.redirect as jest.Mock).mock.calls[0][0]);
+      expect(url.hostname).toEqual(shop);
+    });
+
+    it('throws a 400 when no shop query parameter is given', async () => {
+      const shopifyAuth = createShopifyAuth(baseConfig);
+      const ctx = createMockContext({
+        url: `${baseUrl}/inline`,
       });
 
       await shopifyAuth(ctx, nextFunction);
 
-      expect(mockOAuthStart).toHaveBeenCalledWith(ctx);
+      expect(ctx.throw).toHaveBeenCalledWith(400);
     });
   });
 
   describe('with the /auth/callback path', () => {
+    const baseCallbackUrl = 'https://myapp.com/auth/callback';
+    const nonce = 'totallyrealnonce';
+    const queryData = {
+      code: 'def',
+      shop: shop,
+      state: nonce,
+      hmac: 'abc',
+    };
+
+    beforeEach(() => {
+      Shopify.Auth.OAuth.validateAuthCallback = jest.fn(() => Promise.resolve());
+    });
+
     it('performs oauth callback', async () => {
-      const shopifyAuth = createShopifyAuth(baseConfig);
-      const ctx = createMockContext({
-        url: `https://${baseUrl}/callback`,
+      let ctx = createMockContext({
+        url: `${baseCallbackUrl}?${querystring.stringify(queryData)}`,
+        throw: jest.fn(),
       });
 
+      const shopifyAuth = createShopifyAuth(baseConfig);
       await shopifyAuth(ctx, nextFunction);
 
-      expect(mockOAuthCallback).toHaveBeenCalledWith(ctx);
+      expect(ctx.throw).not.toHaveBeenCalled();
+      expect(ctx.state.shopify.shop).toEqual(shop);
     });
+
+    it('calls afterAuth with ctx when the token request succeeds', async () => {
+      const afterAuth = jest.fn();
+
+      let ctx = createMockContext({
+        url: `${baseCallbackUrl}?${querystring.stringify(queryData)}`,
+        throw: jest.fn(),
+      });
+
+      const shopifyAuth = createShopifyAuth({
+        ...baseConfig,
+        afterAuth,
+      });
+      await shopifyAuth(ctx, nextFunction);
+
+      expect(ctx.throw).not.toHaveBeenCalled();
+      expect(ctx.state.shopify.shop).toEqual(shop);
+      expect(afterAuth).toHaveBeenCalledWith(ctx);
+    });
+
+    it('throws a 400 if the OAuth callback is invalid', async () => {
+      Shopify.Auth.OAuth.validateAuthCallback = jest.fn(() => Promise.reject(new Shopify.Errors.InvalidOAuthError));
+
+      const ctx = createMockContext({
+        url: baseCallbackUrl,
+        throw: jest.fn(),
+      });
+
+      const shopifyAuth = createShopifyAuth(baseConfig);
+      await shopifyAuth(ctx, nextFunction);
+
+      expect(ctx.throw).toHaveBeenCalledWith(400, '');
+    });
+
+    it('throws a 403 if the session does not exist', async () => {
+      Shopify.Auth.OAuth.validateAuthCallback = jest.fn(() => Promise.reject(new Shopify.Errors.SessionNotFound));
+
+      const ctx = createMockContext({
+        url: `${baseCallbackUrl}?${querystring.stringify(queryData)}`,
+        throw: jest.fn(),
+      });
+
+      const shopifyAuth = createShopifyAuth(baseConfig);
+      await shopifyAuth(ctx, nextFunction);
+
+      expect(ctx.throw).toHaveBeenCalledWith(403, '');
+    });
+
+    it('throws a 500 on any other errors', async () => {
+      Shopify.Auth.OAuth.validateAuthCallback = jest.fn(() => Promise.reject(new Shopify.Errors.ShopifyError));
+
+      const ctx = createMockContext({
+        url: `${baseCallbackUrl}?${querystring.stringify(queryData)}`,
+        throw: jest.fn(),
+      });
+
+      const shopifyAuth = createShopifyAuth(baseConfig);
+      await shopifyAuth(ctx, nextFunction);
+
+      expect(ctx.throw).toHaveBeenCalledWith(500, '');
+    });
+
   });
 
   describe('with the /auth/enable_cookies path', () => {
     it('renders the enable_cookies page', async () => {
       const shopifyAuth = createShopifyAuth(baseConfig);
       const ctx = createMockContext({
-        url: `https://${baseUrl}/enable_cookies`,
+        url: `${baseUrl}/enable_cookies`,
       });
 
       await shopifyAuth(ctx, nextFunction);
