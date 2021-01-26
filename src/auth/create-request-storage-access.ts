@@ -2,6 +2,8 @@ import {Context} from 'koa';
 
 import {OAuthStartOptions} from '../types';
 
+import Shopify from '@shopify/shopify-api';
+
 import css from './client/polaris-css';
 import itpHelper from './client/itp-helper';
 import requestStorageAccess from './client/request-storage-access';
@@ -14,7 +16,6 @@ const BODY =
 const ACTION = 'Continue';
 
 export default function createRequestStorageAccess({
-  apiKey,
   prefix,
 }: OAuthStartOptions) {
   return function requestStorage(ctx: Context) {
@@ -38,7 +39,7 @@ export default function createRequestStorageAccess({
   <title>Redirecting…</title>
 
   <script>
-    window.apiKey = "${apiKey}";
+    window.apiKey = "${Shopify.Context.API_KEY}";
     window.shopOrigin = "https://${encodeURIComponent(shop)}";
     ${itpHelper}
     ${storageAccessHelper}

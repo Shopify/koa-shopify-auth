@@ -30,10 +30,7 @@ const baseUrl = 'https://myapp.com/auth';
 const shop = 'test-shop.myshopify.io';
 
 const baseConfig: OAuthStartOptions = {
-  apiKey: 'myapikey',
-  scopes: ['write_orders, write_products'],
   accessMode: 'offline',
-  secret: '',
 };
 
 function nextFunction() {}
@@ -41,6 +38,11 @@ function nextFunction() {}
 describe('Index', () => {
   beforeEach(() => {
     Shopify.Auth.OAuth.beginAuth = jest.fn(() => Promise.resolve(`https://${shop}/auth/callback`));
+
+    const session = new Shopify.Auth.Session.Session('test_session');
+    session.shop = shop;
+    session.accessToken = 'test_token';
+    Shopify.Utils.loadCurrentSession = jest.fn(() => Promise.resolve(session));
   });
 
   describe('with the /auth path', () => {
@@ -68,7 +70,7 @@ describe('Index', () => {
         await shopifyAuth(ctx, nextFunction);
 
         expect(createTopLevelOAuthRedirect).toHaveBeenCalledWith(
-          'myapikey',
+          Shopify.Context.API_KEY,
           '/auth/inline',
         );
         expect(mockTopLevelOAuthRedirect).toHaveBeenCalledWith(ctx);
@@ -86,7 +88,7 @@ describe('Index', () => {
         await shopifyAuth(ctx, nextFunction);
 
         expect(createTopLevelOAuthRedirect).toHaveBeenCalledWith(
-          'myapikey',
+          Shopify.Context.API_KEY,
           '/auth/inline',
         );
         expect(mockTopLevelOAuthRedirect).toHaveBeenCalledWith(ctx);
