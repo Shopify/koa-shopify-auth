@@ -30,7 +30,6 @@ function shouldPerformInlineOAuth({cookies}: Context) {
 
 export default function createShopifyAuth(options: OAuthStartOptions) {
   const config = {
-    scopes: [],
     prefix: '',
     myShopifyDomain: DEFAULT_MYSHOPIFY_DOMAIN,
     accessMode: DEFAULT_ACCESS_MODE,
@@ -44,7 +43,7 @@ export default function createShopifyAuth(options: OAuthStartOptions) {
 
   const inlineOAuthPath = `${prefix}/auth/inline`;
   const topLevelOAuthRedirect = createTopLevelOAuthRedirect(
-    config.apiKey,
+    Shopify.Context.API_KEY,
     inlineOAuthPath,
   );
 
@@ -94,9 +93,7 @@ export default function createShopifyAuth(options: OAuthStartOptions) {
       try {
         await Shopify.Auth.OAuth.validateAuthCallback(ctx.req, ctx.res, ctx.query);
 
-        ctx.state.shopify = {
-          shop: ctx.query.shop,
-        };
+        ctx.state.shopify = await Shopify.Utils.loadCurrentSession(ctx.req, ctx.res);
 
         if (config.afterAuth) {
           await config.afterAuth(ctx);

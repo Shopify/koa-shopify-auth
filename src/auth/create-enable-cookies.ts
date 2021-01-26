@@ -2,6 +2,8 @@ import {Context} from 'koa';
 
 import {OAuthStartOptions} from '../types';
 
+import Shopify from '@shopify/shopify-api';
+
 import css from './client/polaris-css';
 import itpHelper from './client/itp-helper';
 import topLevelInteraction from './client/top-level-interaction';
@@ -15,7 +17,6 @@ information. They expire after 30 days.`;
 const ACTION = 'Enable cookies';
 
 export default function createEnableCookies({
-  apiKey,
   prefix,
 }: OAuthStartOptions) {
   return function enableCookies(ctx: Context) {
@@ -39,7 +40,7 @@ export default function createEnableCookies({
   <title>Redirecting…</title>
 
   <script>
-    window.apiKey = "${apiKey}";
+    window.apiKey = "${Shopify.Context.API_KEY}";
     window.shopOrigin = "https://${encodeURIComponent(shop)}";
 
     ${itpHelper}
