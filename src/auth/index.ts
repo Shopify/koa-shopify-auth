@@ -73,7 +73,7 @@ export default function createShopifyAuth(options: OAuthStartOptions) {
       }
 
       ctx.cookies.set(TOP_LEVEL_OAUTH_COOKIE_NAME, '', getCookieOptions(ctx));
-      const redirectUrl = await Shopify.Auth.OAuth.beginAuth(
+      const redirectUrl = await Shopify.Auth.beginAuth(
         ctx.req,
         ctx.res,
         shop,
@@ -91,7 +91,7 @@ export default function createShopifyAuth(options: OAuthStartOptions) {
 
     if (ctx.path === oAuthCallbackPath) {
       try {
-        await Shopify.Auth.OAuth.validateAuthCallback(ctx.req, ctx.res, ctx.query);
+        await Shopify.Auth.validateAuthCallback(ctx.req, ctx.res, ctx.query);
 
         ctx.state.shopify = await Shopify.Utils.loadCurrentSession(ctx.req, ctx.res);
 
