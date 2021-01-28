@@ -19,9 +19,14 @@ export function redirectToAuth(
 }
 
 export async function clearSession(ctx: Context) {
-  const session = await Shopify.Utils.loadCurrentSession(ctx.req, ctx.res);
-
-  if (session) {
-    await Shopify.Context.deleteSession(session.id);
+  try {
+    await Shopify.Utils.deleteCurrentSession(ctx.req, ctx.res);
+  }
+  catch (error) {
+    if (error instanceof Shopify.Errors.SessionNotFound) {
+      // We can just move on if no sessions were cleared
+    } else {
+      throw error;
+    }
   }
 }

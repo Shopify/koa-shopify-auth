@@ -19,7 +19,7 @@ describe('verifyRequest', () => {
 
   describe('when there is an accessToken and shop in session', () => {
     let jwtToken: string;
-    const jwtSessionId = Shopify.Auth.OAuth.getJwtSessionId(TEST_SHOP, TEST_USER);
+    const jwtSessionId = Shopify.Auth.getJwtSessionId(TEST_SHOP, TEST_USER);
 
     beforeEach(async () => {
       const jwtPayload = {
@@ -36,11 +36,11 @@ describe('verifyRequest', () => {
 
       jwtToken = jwt.sign(jwtPayload, Shopify.Context.API_SECRET_KEY, { algorithm: 'HS256' });
 
-      const session = new Shopify.Auth.Session.Session(jwtSessionId);
+      const session = new Shopify.Session.Session(jwtSessionId);
       session.shop = TEST_SHOP;
       session.expires = new Date(jwtPayload.exp * 1000);
       session.accessToken = 'test_token';
-      await Shopify.Context.storeSession(session);
+      await Shopify.Utils.storeSession(session);
     });
 
     it('calls next', async () => {
@@ -228,7 +228,7 @@ function appUrl(shop?: string) {
 }
 
 async function expireJwtSession(sessionId: string) {
-  const session = await Shopify.Context.loadSession(sessionId);
+  const session = await Shopify.Context.SESSION_STORAGE.loadSession(sessionId);
   session.expires = new Date(Date.now() - 60000);
-  await Shopify.Context.storeSession(session);
+  await Shopify.Utils.storeSession(session);
 }

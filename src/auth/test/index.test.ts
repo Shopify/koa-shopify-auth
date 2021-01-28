@@ -37,9 +37,9 @@ function nextFunction() {}
 
 describe('Index', () => {
   beforeEach(() => {
-    Shopify.Auth.OAuth.beginAuth = jest.fn(() => Promise.resolve(`https://${shop}/auth/callback`));
+    Shopify.Auth.beginAuth = jest.fn(() => Promise.resolve(`https://${shop}/auth/callback`));
 
-    const session = new Shopify.Auth.Session.Session('test_session');
+    const session = new Shopify.Session.Session('test_session');
     session.shop = shop;
     session.accessToken = 'test_token';
     Shopify.Utils.loadCurrentSession = jest.fn(() => Promise.resolve(session));
@@ -149,7 +149,7 @@ describe('Index', () => {
     };
 
     beforeEach(() => {
-      Shopify.Auth.OAuth.validateAuthCallback = jest.fn(() => Promise.resolve());
+      Shopify.Auth.validateAuthCallback = jest.fn(() => Promise.resolve());
     });
 
     it('performs oauth callback', async () => {
@@ -185,7 +185,7 @@ describe('Index', () => {
     });
 
     it('throws a 400 if the OAuth callback is invalid', async () => {
-      Shopify.Auth.OAuth.validateAuthCallback = jest.fn(() => Promise.reject(new Shopify.Errors.InvalidOAuthError));
+      Shopify.Auth.validateAuthCallback = jest.fn(() => Promise.reject(new Shopify.Errors.InvalidOAuthError));
 
       const ctx = createMockContext({
         url: baseCallbackUrl,
@@ -199,7 +199,7 @@ describe('Index', () => {
     });
 
     it('throws a 403 if the session does not exist', async () => {
-      Shopify.Auth.OAuth.validateAuthCallback = jest.fn(() => Promise.reject(new Shopify.Errors.SessionNotFound));
+      Shopify.Auth.validateAuthCallback = jest.fn(() => Promise.reject(new Shopify.Errors.SessionNotFound));
 
       const ctx = createMockContext({
         url: `${baseCallbackUrl}?${querystring.stringify(queryData)}`,
@@ -213,7 +213,7 @@ describe('Index', () => {
     });
 
     it('throws a 500 on any other errors', async () => {
-      Shopify.Auth.OAuth.validateAuthCallback = jest.fn(() => Promise.reject(new Shopify.Errors.ShopifyError));
+      Shopify.Auth.validateAuthCallback = jest.fn(() => Promise.reject(new Shopify.Errors.ShopifyError));
 
       const ctx = createMockContext({
         url: `${baseCallbackUrl}?${querystring.stringify(queryData)}`,
