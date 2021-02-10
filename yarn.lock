@@ -1257,14 +1257,15 @@
   dependencies:
     tslib "^1.14.1"
 
-"@shopify/shopify-api@0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@shopify/shopify-api/-/shopify-api-0.3.0.tgz#e21b383d31859fc54f5b9056993a63eb2c10e79f"
-  integrity sha512-QQjSkVc3ax/LdU6vPgABs0LChZk6pLa2HfTAHyFympad1NkX4OJ7f7kAR1hiIuOps1rIYo2jcOqKnGfjQYWX3w==
+"@shopify/shopify-api@^0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@shopify/shopify-api/-/shopify-api-0.4.0.tgz#86ff8f3b6bd0027d0da3f366407ca484729ed16a"
+  integrity sha512-Y/SYQObM36jiryCfO1t891A3m1P0uGXbA3gVbQdu2NU+i5z2ClMd82JOU0mG8IaUXjMoAorcy0hET+cFyJq/qQ==
   dependencies:
     "@shopify/network" "^1.5.1"
     "@types/jsonwebtoken" "^8.5.0"
     "@types/node-fetch" "^2.5.7"
+    "@types/supertest" "^2.0.10"
     cookies "^0.8.0"
     jsonwebtoken "^8.5.1"
     node-fetch "^2.6.1"
@@ -1349,6 +1350,11 @@
   version "0.5.3"
   resolved "https://registry.yarnpkg.com/@types/content-disposition/-/content-disposition-0.5.3.tgz#0aa116701955c2faa0717fc69cd1596095e49d96"
   integrity sha512-P1bffQfhD3O4LW0ioENXUhZ9OIa0Zn+P7M+pWgkCKaT53wVLSq0mrKksCID/FGHpFhRSxRGhgrQmfhRuzwtKdg==
+
+"@types/cookiejar@*":
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/@types/cookiejar/-/cookiejar-2.1.2.tgz#66ad9331f63fe8a3d3d9d8c6e3906dd10f6446e8"
+  integrity sha512-t73xJJrvdTjXrn4jLS9VSGRbz0nUY3cl2DMGDU48lKl+HR9dbbjW2A9r3g40VA++mQpy6uuHg33gy7du2BKpog==
 
 "@types/cookies@*":
   version "0.7.4"
@@ -1516,6 +1522,21 @@
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-1.0.1.tgz#0a851d3bd96498fa25c33ab7278ed3bd65f06c3e"
   integrity sha512-l42BggppR6zLmpfU6fq9HEa2oGPEI8yrSPL3GITjfRInppYFahObbIQOQK3UGxEnyQpltZLaPe75046NOZQikw==
+
+"@types/superagent@*":
+  version "4.1.10"
+  resolved "https://registry.yarnpkg.com/@types/superagent/-/superagent-4.1.10.tgz#5e2cc721edf58f64fe9b819f326ee74803adee86"
+  integrity sha512-xAgkb2CMWUMCyVc/3+7iQfOEBE75NvuZeezvmixbUw3nmENf2tCnQkW5yQLTYqvXUQ+R6EXxdqKKbal2zM5V/g==
+  dependencies:
+    "@types/cookiejar" "*"
+    "@types/node" "*"
+
+"@types/supertest@^2.0.10":
+  version "2.0.10"
+  resolved "https://registry.yarnpkg.com/@types/supertest/-/supertest-2.0.10.tgz#630d79b4d82c73e043e43ff777a9ca98d457cab7"
+  integrity sha512-Xt8TbEyZTnD5Xulw95GLMOkmjGICrOQyJ2jqgkSjAUR3mm7pAIzSR0NFBaMcwlzVvlpCjNwbATcWWwjNiZiFrQ==
+  dependencies:
+    "@types/superagent" "*"
 
 "@types/yargs-parser@*":
   version "15.0.0"
