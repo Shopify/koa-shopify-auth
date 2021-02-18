@@ -40,6 +40,7 @@ describe('verifyRequest', () => {
       session.shop = TEST_SHOP;
       session.expires = new Date(jwtPayload.exp * 1000);
       session.accessToken = 'test_token';
+      session.scope = 'test_scope';
       await Shopify.Utils.storeSession(session);
     });
 
@@ -120,6 +121,29 @@ describe('verifyRequest', () => {
 
       expect(ctx.redirect).toHaveBeenCalledWith(
         `${authRoute}?shop=some_other_shop.myshopify.io`,
+      );
+    });
+
+    it('redirects to authRoute if the session scopes are different than the current setting', async () => {
+      const authRoute = '/my-auth-route';
+
+      const session = await Shopify.Context.SESSION_STORAGE.loadSession(jwtSessionId);
+      session.scope = 'different_scope';
+      await Shopify.Utils.storeSession(session);
+
+      const verifyRequestMiddleware = verifyRequest({authRoute});
+      const next = jest.fn();
+      const ctx = createMockContext({
+        url: appUrl(TEST_SHOP),
+        redirect: jest.fn(),
+        headers: { authorization: `Bearer ${jwtToken}` }
+      });
+
+      fetch.mock(metaFieldsUrl(TEST_SHOP), StatusCode.Ok);
+      await verifyRequestMiddleware(ctx, next);
+
+      expect(ctx.redirect).toHaveBeenCalledWith(
+        `${authRoute}?shop=${TEST_SHOP}`,
       );
     });
   });

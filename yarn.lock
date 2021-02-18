@@ -1257,10 +1257,10 @@
   dependencies:
     tslib "^1.14.1"
 
-"@shopify/shopify-api@^0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@shopify/shopify-api/-/shopify-api-0.4.0.tgz#86ff8f3b6bd0027d0da3f366407ca484729ed16a"
-  integrity sha512-Y/SYQObM36jiryCfO1t891A3m1P0uGXbA3gVbQdu2NU+i5z2ClMd82JOU0mG8IaUXjMoAorcy0hET+cFyJq/qQ==
+"@shopify/shopify-api@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@shopify/shopify-api/-/shopify-api-0.5.0.tgz#470e67a4b4c862882a3eefbe976b37b9585313ba"
+  integrity sha512-1INjqmUH9GP9M+2HjgvRHJO2RGxHrhzpIKvnoJP4ZCUbZgDjq/GLpOn+fhGGQDfVc7IkGK6ypIQXxW5Th7sZcg==
   dependencies:
     "@shopify/network" "^1.5.1"
     "@types/jsonwebtoken" "^8.5.0"

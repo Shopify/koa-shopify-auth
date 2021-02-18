@@ -17,10 +17,14 @@ export function verifyToken(routes: Routes) {
     let session: Session | undefined;
     session = await Shopify.Utils.loadCurrentSession(ctx.req, ctx.res);
 
-    if (session?.accessToken && (!session?.expires || session?.expires >= new Date())) {
-      ctx.cookies.set(TOP_LEVEL_OAUTH_COOKIE_NAME);
-      await next();
-      return;
+    if (session) {
+      const scopesChanged = !Shopify.Context.SCOPES.equals(session.scope);
+
+      if (!scopesChanged && session.accessToken && (!session.expires || session.expires >= new Date())) {
+        ctx.cookies.set(TOP_LEVEL_OAUTH_COOKIE_NAME);
+        await next();
+        return;
+      }
     }
 
     ctx.cookies.set(TEST_COOKIE_NAME, '1');
