@@ -15,10 +15,10 @@ Versions prior to 3.1.68 are vulnerable to a reflected XSS attack. Please update
 
 ## Installation
 
-This package depends on the [Shopify Node Library](https://github.com/Shopify/shopify-node-api) being included in your app, so you should install both of them:
+This package builds upon the [Shopify Node Library](https://github.com/Shopify/shopify-node-api), so your app will have access to all of the library's features as well as the Koa-specific middlewares this package provides.
 
 ```bash
-$ yarn add @shopify/koa-shopify-auth @shopify/shopify-api
+$ yarn add @shopify/koa-shopify-auth
 ```
 
 ## Usage
@@ -26,7 +26,7 @@ $ yarn add @shopify/koa-shopify-auth @shopify/shopify-api
 This package exposes `shopifyAuth` by default, and `verifyRequest` as a named export. To make it ready for use, you need to initialize the Shopify Library and then use that to initialize this package:
 
 ```js
-import shopifyAuth, {verifyRequest, initializeShopifyKoaMiddleware} from '@shopify/koa-shopify-auth';
+import shopifyAuth, {verifyRequest} from '@shopify/koa-shopify-auth';
 import Shopify, {ApiVersion} from '@shopify/shopify-api';
 
 // Initialize the library
@@ -40,9 +40,6 @@ Shopify.Context.initialize({
   // More information at https://github.com/Shopify/shopify-node-api/blob/main/docs/issues.md#notes-on-session-handling
   SESSION_STORAGE: new Shopify.Session.MemorySessionStorage(),
 });
-
-// Initialize the Koa middleware
-initializeShopifyKoaMiddleware(Shopify.Context);
 ```
 
 ### shopifyAuth
@@ -104,8 +101,7 @@ Versions prior to v4 of this package used cookies to store session information f
 If you have an app using this package, you can migrate from cookie-based authentication to session tokens by performing a few steps:
 
 - Upgrade your `@shopify/koa-shopify-auth` dependency to v4+
-- Install `@shopify/shopify-api` in your backend app
-- Update your server as per the [Usage](#usage) instructions to properly initialize the `@shopify/shopify-api` library and the `@shopify/koa-shopify-auth` middleware
+- Update your server as per the [Usage](#usage) instructions to properly initialize the `@shopify/shopify-api` library
 - Install `@shopify/app-bridge-utils` in your frontend app
 - In your frontend app, replace `fetch` calls with `authenticatedFetch` from App Bridge
 
@@ -122,7 +118,7 @@ import 'isomorphic-fetch';
 
 import Koa from 'koa';
 import session from 'koa-session';
-import shopifyAuth, {verifyRequest, initializeShopifyKoaMiddleware} from '@shopify/koa-shopify-auth';
+import shopifyAuth, {verifyRequest} from '@shopify/koa-shopify-auth';
 import Shopify, {ApiVersion} from '@shopify/shopify-api';
 
 // initializes the library
@@ -135,9 +131,6 @@ Shopify.Context.initialize({
   IS_EMBEDDED_APP: true,
   SESSION_STORAGE: new Shopify.Session.MemorySessionStorage(),
 });
-
-// initializes the Koa middleware with the same settings
-initializeShopifyKoaMiddleware(Shopify.Context);
 
 const app = new Koa();
 app.keys = [Shopify.Context.API_SECRET_KEY];
