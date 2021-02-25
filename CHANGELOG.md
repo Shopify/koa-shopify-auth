@@ -6,9 +6,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
 ### Added
 
+- [Feature] Start using the new Shopify library instead of implementing all of the server-side functions. [54](https://github.com/Shopify/koa-shopify-auth/pull/54)
+- Sets the `USER_AGENT_PREFIX` on `Shopify.Context` for usage tracking data. [51](https://github.com/Shopify/koa-shopify-auth/pull/51)
+
 ## [3.2.0] - 2020-12-01
+
 - [Feature] Add missing associated user data to the session [23](https://github.com/Shopify/koa-shopify-auth/pull/23)
 - Fix inconsistency in authentication path prefix to remove trailing slash [29](https://github.com/Shopify/koa-shopify-auth/pull/29)
 

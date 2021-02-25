@@ -1,5 +1,7 @@
+import Shopify from '@shopify/shopify-api';
+import { Session } from '@shopify/shopify-api/dist/auth/session';
+
 import {Context} from 'koa';
-import {Method, Header, StatusCode} from '@shopify/network';
 
 import {NextFunction} from '../types';
 import {TEST_COOKIE_NAME, TOP_LEVEL_OAUTH_COOKIE_NAME} from '../index';
@@ -12,30 +14,17 @@ export function verifyToken(routes: Routes) {
     ctx: Context,
     next: NextFunction,
   ) {
-    const {session} = ctx;
+    let session: Session | undefined;
+    session = await Shopify.Utils.loadCurrentSession(ctx.req, ctx.res);
 
-    if (session && session.accessToken) {
-      ctx.cookies.set(TOP_LEVEL_OAUTH_COOKIE_NAME);
-      // If a user has installed the store previously on their shop, the accessToken can be stored in session.
-      // we need to check if the accessToken is valid, and the only way to do this is by hitting the api.
-      const response = await fetch(
-        `https://${session.shop}/admin/metafields.json`,
-        {
-          method: Method.Post,
-          headers: {
-            [Header.ContentType]: 'application/json',
-            'X-Shopify-Access-Token': session.accessToken,
-          },
-        },
-      );
+    if (session) {
+      const scopesChanged = !Shopify.Context.SCOPES.equals(session.scope);
 
-      if (response.status === StatusCode.Unauthorized) {
-        redirectToAuth(routes, ctx);
+      if (!scopesChanged && session.accessToken && (!session.expires || session.expires >= new Date())) {
+        ctx.cookies.set(TOP_LEVEL_OAUTH_COOKIE_NAME);
+        await next();
         return;
       }
-
-      await next();
-      return;
     }
 
     ctx.cookies.set(TEST_COOKIE_NAME, '1');

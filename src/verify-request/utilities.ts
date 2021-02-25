@@ -1,5 +1,7 @@
 import {Context} from 'koa';
 
+import Shopify from '@shopify/shopify-api';
+
 import {Routes} from './types';
 
 export function redirectToAuth(
@@ -16,7 +18,15 @@ export function redirectToAuth(
   ctx.redirect(routeForRedirect);
 }
 
-export function clearSession(ctx: Context) {
-  delete ctx.session.shop;
-  delete ctx.session.accessToken;
+export async function clearSession(ctx: Context) {
+  try {
+    await Shopify.Utils.deleteCurrentSession(ctx.req, ctx.res);
+  }
+  catch (error) {
+    if (error instanceof Shopify.Errors.SessionNotFound) {
+      // We can just move on if no sessions were cleared
+    } else {
+      throw error;
+    }
+  }
 }

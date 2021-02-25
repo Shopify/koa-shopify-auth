@@ -1,3 +1,4 @@
+import '../../test/test_helper';
 import redirectionScript from '../redirection-page';
 
 const origin = 'https://shopify.com/?x=шеллы';

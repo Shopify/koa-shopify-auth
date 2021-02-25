@@ -1,5 +1,8 @@
 import {Context} from 'koa';
 
+import Shopify from '@shopify/shopify-api';
+import { Session } from '@shopify/shopify-api/dist/auth/session';
+
 import {NextFunction} from '../types';
 
 import {Routes} from './types';
@@ -10,10 +13,12 @@ export function loginAgainIfDifferentShop(routes: Routes) {
     ctx: Context,
     next: NextFunction,
   ) {
-    const {query, session} = ctx;
+    const {query} = ctx;
+    let session: Session | undefined;
+    session = await Shopify.Utils.loadCurrentSession(ctx.req, ctx.res);
 
     if (session && query.shop && session.shop !== query.shop) {
-      clearSession(ctx);
+      await clearSession(ctx);
       redirectToAuth(routes, ctx);
       return;
     }
