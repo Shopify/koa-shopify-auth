@@ -12,4 +12,5 @@ beforeEach(() => {
     IS_EMBEDDED_APP: true,
     SESSION_STORAGE: new MemorySessionStorage(),
   });
+  Shopify.Context.USER_AGENT_PREFIX = undefined;
 });

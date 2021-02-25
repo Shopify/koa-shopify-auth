@@ -6,6 +6,7 @@ import getCookieOptions from './cookie-options';
 import createEnableCookies from './create-enable-cookies';
 import createTopLevelOAuthRedirect from './create-top-level-oauth-redirect';
 import createRequestStorageAccess from './create-request-storage-access';
+import setUserAgent from './set-user-agent';
 
 import Shopify from '@shopify/shopify-api';
 
@@ -50,6 +51,8 @@ export default function createShopifyAuth(options: OAuthStartOptions) {
   const enableCookiesPath = `${oAuthStartPath}/enable_cookies`;
   const enableCookies = createEnableCookies(config);
   const requestStorageAccess = createRequestStorageAccess(config);
+
+  setUserAgent();
 
   return async function shopifyAuth(ctx: Context, next: NextFunction) {
     ctx.cookies.secure = true;
