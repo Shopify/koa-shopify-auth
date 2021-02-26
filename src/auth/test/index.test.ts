@@ -12,6 +12,7 @@ import crypto from 'crypto';
 import createShopifyAuth from '../index';
 import createTopLevelOAuthRedirect from '../create-top-level-oauth-redirect';
 import {OAuthStartOptions} from '../../types';
+import {KOA_USER_AGENT_PREFIX} from '../set-user-agent';
 
 const mockTopLevelOAuthRedirect = jest.fn();
 jest.mock('../create-top-level-oauth-redirect', () =>
@@ -239,5 +240,12 @@ describe('Index', () => {
 
       expect(mockEnableCookies).toHaveBeenCalledWith(ctx);
     });
+  });
+
+  it('always sets the user agent prefix', () => {
+    expect(Shopify.Context.USER_AGENT_PREFIX).toBeUndefined();
+
+    const shopifyAuth = createShopifyAuth(baseConfig);
+    expect(Shopify.Context.USER_AGENT_PREFIX).toEqual(KOA_USER_AGENT_PREFIX);
   });
 });
