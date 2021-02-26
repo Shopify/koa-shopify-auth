@@ -7,6 +7,8 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [4.0.1] - 2021-02-26
+
 ### Fixed
 
 - Sets the `USER_AGENT_PREFIX` on `Shopify.Context` for usage tracking data. [55](https://github.com/Shopify/koa-shopify-auth/pull/55)
