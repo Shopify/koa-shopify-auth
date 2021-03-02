@@ -7,6 +7,9 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+- Ensure both `shopifyAuth` and `verifyRequest` work in offline mode. [59](https://github.com/Shopify/koa-shopify-auth/pull/59)
+
 ## [4.0.1] - 2021-02-26
 
 ### Fixed

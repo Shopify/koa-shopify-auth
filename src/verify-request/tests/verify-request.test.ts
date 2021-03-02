@@ -58,6 +58,28 @@ describe('verifyRequest', () => {
       expect(next).toHaveBeenCalled();
     });
 
+    it('calls next for offline sessions', async () => {
+      const session = new Shopify.Session.Session(Shopify.Auth.getOfflineSessionId(TEST_SHOP));
+      session.shop = TEST_SHOP;
+      session.isOnline = false;
+      session.expires = new Date(Date.now() + 86400000);
+      session.accessToken = 'test_token';
+      session.scope = 'test_scope';
+      await Shopify.Utils.storeSession(session);
+
+      const verifyRequestMiddleware = verifyRequest({ accessMode: 'offline' });
+      const ctx = createMockContext({
+        url: appUrl(TEST_SHOP),
+        headers: { authorization: `Bearer ${jwtToken}` }
+      } as any);
+      const next = jest.fn();
+
+      fetch.mock(metaFieldsUrl(TEST_SHOP), StatusCode.Ok);
+      await verifyRequestMiddleware(ctx, next);
+
+      expect(next).toHaveBeenCalled();
+    });
+
     it('calls next when there is no shop in the query', async () => {
       const verifyRequestMiddleware = verifyRequest();
       const ctx = createMockContext({

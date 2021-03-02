@@ -1,6 +1,12 @@
+import { AccessMode } from "src/types";
+
 export interface Routes {
   authRoute: string;
   fallbackRoute: string;
 }
 
-export type Options = Partial<Routes>;
+type VerifyRequestOptions = {
+  accessMode: AccessMode;
+}
+
+export type Options = Partial<VerifyRequestOptions> & Partial<Routes>;

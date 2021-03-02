@@ -27,7 +27,7 @@
   "homepage": "https://github.com/Shopify/koa-shopify-auth/blob/master/README.md",
   "dependencies": {
     "@shopify/network": "^1.5.0",
-    "@shopify/shopify-api": "^1.0.0",
+    "@shopify/shopify-api": "^1.1.0",
     "koa-compose": ">=3.0.0 <4.0.0",
     "nonce": "^1.0.4",
     "tslib": "^1.9.3"
@@ -38,7 +38,7 @@
     "@types/jest": "^26.0.20",
     "@types/koa": "^2.0.0",
     "@types/koa-compose": "*",
-    "@types/node": "^14.14.20",
+    "@types/node": "^14.14.31",
     "babel-preset-shopify": "^21.0.0",
     "eslint": "^7.8.1",
     "jest": "^26.4.2",
