@@ -166,6 +166,19 @@ describe('Index', () => {
       expect(ctx.state.shopify.shop).toEqual(shop);
     });
 
+    it('performs oauth callback with offline sessions', async () => {
+      let ctx = createMockContext({
+        url: `${baseCallbackUrl}?${querystring.stringify(queryData)}`,
+        throw: jest.fn(),
+      });
+
+      const shopifyAuth = createShopifyAuth({...baseConfig, accessMode: 'offline'});
+      await shopifyAuth(ctx, nextFunction);
+
+      expect(ctx.throw).not.toHaveBeenCalled();
+      expect(ctx.state.shopify.shop).toEqual(shop);
+    });
+
     it('calls afterAuth with ctx when the token request succeeds', async () => {
       const afterAuth = jest.fn();
 

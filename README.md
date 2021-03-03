@@ -90,6 +90,9 @@ app.use(
     // path to redirect to if verification fails and there is no shop on the query
     // defaults to '/auth'
     fallbackRoute: '/install',
+    // which access mode is being used
+    // defaults to 'online'
+    accessMode: 'offline',
   }),
 );
 ```
@@ -102,8 +105,9 @@ If you have an app using this package, you can migrate from cookie-based authent
 
 - Upgrade your `@shopify/koa-shopify-auth` dependency to v4+
 - Update your server as per the [Usage](#usage) instructions to properly initialize the `@shopify/shopify-api` library
+- If you are using `accessMode: 'offline'` in `shopifyAuth`, make sure to pass the same value in `verifyRequest`
 - Install `@shopify/app-bridge-utils` in your frontend app
-- In your frontend app, replace `fetch` calls with `authenticatedFetch` from App Bridge
+- In your frontend app, replace `fetch` calls with `authenticatedFetch` from App Bridge Utils
 
 **Note**: the backend steps need to be performed to fully migrate your app to v4, even if your app is not embedded.
 
