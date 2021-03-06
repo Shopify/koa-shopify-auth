@@ -1,4 +1,4 @@
-import { AccessMode } from "src/types";
+import { AccessMode } from "../types";
 
 export interface Routes {
   authRoute: string;
