@@ -21,7 +21,7 @@ export function verifyToken(routes: Routes, accessMode: AccessMode = DEFAULT_ACC
     if (session) {
       const scopesChanged = !Shopify.Context.SCOPES.equals(session.scope);
 
-      if (!scopesChanged && session.accessToken && (!session.expires || session.expires >= new Date())) {
+      if (!scopesChanged && session.accessToken && (!session.expires || +(new Date(session.expires)) >= +(new Date()))) {
         ctx.cookies.set(TOP_LEVEL_OAUTH_COOKIE_NAME);
         await next();
         return;
