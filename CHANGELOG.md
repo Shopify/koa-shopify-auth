@@ -8,6 +8,9 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
 
 ### Fixed
+
+- Convert session.expires to a Date object. 
+
 ### Added
 
 ## [4.0.2] - 2021-03-03
