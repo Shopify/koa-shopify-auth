@@ -1251,16 +1251,16 @@
     tslib "^1.9.3"
 
 "@shopify/network@^1.5.1":
-  version "1.6.1"
-  resolved "https://registry.yarnpkg.com/@shopify/network/-/network-1.6.1.tgz#a3eea9bbea1da11a21aaf4b157053efd26a66905"
-  integrity sha512-VooupKHmBedFoNWGY2sg/xZ2jodGW0pcMsi5M83S0kHeJ0zNPUSOZb+PT2wPU6YO5XiYu7f1GwvtBK5qsAwWKw==
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/@shopify/network/-/network-1.6.2.tgz#45b5d55cdcfcffa166e7b39bf161bc65f0aba225"
+  integrity sha512-7Zjf3VHOFfih4pAEWPzFICd2oW/bxglfCgMMsUQfVxyLZtEms6a74X2COSkihRfr4nQ9fU1nF1bTjLFfcUxFbQ==
   dependencies:
     tslib "^1.14.1"
 
-"@shopify/shopify-api@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@shopify/shopify-api/-/shopify-api-1.1.0.tgz#81db856d7a9ce2d2cdc53ea8fca30d34d22521f5"
-  integrity sha512-V9hlLLuitOr1BdqhPfcID04wyC7AevMixDZA3XnARcCeSQUFtGRJnb72q0Zi0OnNtru18StFBRBMEm6RHj03zQ==
+"@shopify/shopify-api@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@shopify/shopify-api/-/shopify-api-1.2.0.tgz#f89aed782b4b359c0bff7a7a610e05648c1c9c68"
+  integrity sha512-/dw40VBJCS4mViNrI1kBJYp08FeNKgUDiUdt6nnbgioooLEdAEMHJq3uy1Qo9q3SraIsSOPVMjtqnCcKM0XHbg==
   dependencies:
     "@shopify/network" "^1.5.1"
     "@types/jsonwebtoken" "^8.5.0"
@@ -1435,9 +1435,9 @@
     pretty-format "^26.0.0"
 
 "@types/jsonwebtoken@^8.5.0":
-  version "8.5.0"
-  resolved "https://registry.yarnpkg.com/@types/jsonwebtoken/-/jsonwebtoken-8.5.0.tgz#2531d5e300803aa63279b232c014acf780c981c5"
-  integrity sha512-9bVao7LvyorRGZCw0VmH/dr7Og+NdjYSsKAxB43OQoComFbBgsEpoR9JW6+qSq/ogwVBg8GI2MfAlk4SYI4OLg==
+  version "8.5.1"
+  resolved "https://registry.yarnpkg.com/@types/jsonwebtoken/-/jsonwebtoken-8.5.1.tgz#56958cb2d80f6d74352bd2e501a018e2506a8a84"
+  integrity sha512-rNAPdomlIUX0i0cg2+I+Q1wOUr531zHBQ+cV/28PJ39bSPKjahatZZ2LMuhiguETkCgLVzfruw/ZvNMNkKoSzw==
   dependencies:
     "@types/node" "*"
 
@@ -1485,10 +1485,10 @@
     "@types/node" "*"
     form-data "^3.0.0"
 
-"@types/node@*", "@types/node@^14.14.31":
-  version "14.14.31"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.31.tgz#72286bd33d137aa0d152d47ec7c1762563d34055"
-  integrity sha512-vFHy/ezP5qI0rFgJ7aQnjDXwAMrG0KqqIH7tQG5PPv3BWBayOPIQNBjVc/P6hhdZfMx51REc6tfDNXHUio893g==
+"@types/node@*", "@types/node@^14.14":
+  version "14.14.35"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.35.tgz#42c953a4e2b18ab931f72477e7012172f4ffa313"
+  integrity sha512-Lt+wj8NVPx0zUmUwumiVXapmaLUcAk3yPuHCFVXras9k5VT9TdhJqKqGVUQCD60OTMCl0qxJ57OiTL0Mic3Iag==
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.0"
