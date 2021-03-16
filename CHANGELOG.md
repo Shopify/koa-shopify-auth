@@ -10,6 +10,12 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 ### Fixed
 ### Added
 
+## [4.0.3] - 2021-03-16
+
+### Fixed
+
+- Fix bad import path for type AccessMode. [63](https://github.com/Shopify/koa-shopify-auth/pull/63)
+
 ## [4.0.2] - 2021-03-03
 
 ### Fixed
