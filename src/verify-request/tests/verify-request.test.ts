@@ -9,6 +9,7 @@ import jwt from 'jsonwebtoken';
 import verifyRequest from '../verify-request';
 import {clearSession} from '../utilities';
 import {TEST_COOKIE_NAME, TOP_LEVEL_OAUTH_COOKIE_NAME} from '../../index';
+import {REAUTH_HEADER, REAUTH_URL_HEADER} from '../verify-token';
 import { clear } from 'console';
 
 const TEST_SHOP = 'testshop.myshopify.io';
@@ -168,6 +169,29 @@ describe('verifyRequest', () => {
         `${authRoute}?shop=${TEST_SHOP}`,
       );
     });
+
+    it('returns a header if setting is active', async () => {
+      // Session exists but has already expired
+      const session = await Shopify.Context.SESSION_STORAGE.loadSession(jwtSessionId);
+      session.expires = new Date(Date.now() - 10);
+      await Shopify.Utils.storeSession(session);
+
+      const verifyRequestMiddleware = verifyRequest({returnHeader: true});
+      const ctx = createMockContext({
+        redirect: jest.fn(),
+        headers: { authorization: `Bearer ${jwtToken}` }
+      });
+      const next = jest.fn();
+
+      await verifyRequestMiddleware(ctx, next);
+
+      expect(ctx.redirect).not.toHaveBeenCalled();
+      expect(ctx.response.status).toBe(403);
+      expect(ctx.response.headers).toEqual(expect.objectContaining({
+        [REAUTH_HEADER.toLowerCase()]: '1',
+        [REAUTH_URL_HEADER.toLowerCase()]: `/auth?shop=${TEST_SHOP}`,
+      }));
+    });
   });
 
   describe('when there is no session', () => {
@@ -261,6 +285,38 @@ describe('verifyRequest', () => {
       });
 
       expect(await clearSession(ctx)).toBeUndefined();
+    });
+
+    it('returns a header if setting is active', async () => {
+      const jwtPayload = {
+        iss: `https://${TEST_SHOP}/admin`,
+        dest: `https://${TEST_SHOP}`,
+        aud: Shopify.Context.API_KEY,
+        sub: TEST_USER,
+        exp: (Date.now() + 3600000) / 1000,
+        nbf: 1234,
+        iat: 1234,
+        jti: '4321',
+        sid: 'abc123',
+      };
+
+      const jwtToken = jwt.sign(jwtPayload, Shopify.Context.API_SECRET_KEY, { algorithm: 'HS256' });
+
+      const verifyRequestMiddleware = verifyRequest({returnHeader: true});
+      const ctx = createMockContext({
+        redirect: jest.fn(),
+        headers: { authorization: `Bearer ${jwtToken}` }
+      });
+      const next = jest.fn();
+
+      await verifyRequestMiddleware(ctx, next);
+
+      expect(ctx.redirect).not.toHaveBeenCalled();
+      expect(ctx.response.status).toBe(403);
+      expect(ctx.response.headers).toEqual(expect.objectContaining({
+        [REAUTH_HEADER.toLowerCase()]: '1',
+        [REAUTH_URL_HEADER.toLowerCase()]: `/auth?shop=${TEST_SHOP}`,
+      }));
     });
   });
 });
