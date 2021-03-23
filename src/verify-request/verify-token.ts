@@ -37,11 +37,11 @@ export function verifyToken(routes: Routes, accessMode: AccessMode = DEFAULT_ACC
       ctx.response.status = 403;
       ctx.response.set(REAUTH_HEADER, '1');
 
-      let shop: string;
+      let shop: string|undefined = undefined;
       if (session) {
         shop = session.shop;
       } else if (Shopify.Context.IS_EMBEDDED_APP) {
-        const authHeader: string = ctx.req.headers.authorization;
+        const authHeader: string|undefined = ctx.req.headers.authorization;
         const matches = authHeader?.match(/Bearer (.*)/);
         if (matches) {
           const payload = Shopify.Utils.decodeSessionToken(matches[1]);
