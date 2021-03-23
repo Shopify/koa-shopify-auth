@@ -93,6 +93,11 @@ app.use(
     // which access mode is being used
     // defaults to 'online'
     accessMode: 'offline',
+    // if false, redirect the user to OAuth. If true, send back a 403 with the following headers:
+    //  - X-Shopify-API-Request-Failure-Reauthorize: '1'
+    //  - X-Shopify-API-Request-Failure-Reauthorize-Url: '<auth_url_path>'
+    // defaults to false
+    returnHeader: true,
   }),
 );
 ```

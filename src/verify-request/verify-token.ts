@@ -10,7 +10,10 @@ import {Routes} from './types';
 import {redirectToAuth} from './utilities';
 import {DEFAULT_ACCESS_MODE} from '../auth';
 
-export function verifyToken(routes: Routes, accessMode: AccessMode = DEFAULT_ACCESS_MODE) {
+export const REAUTH_HEADER = 'X-Shopify-API-Request-Failure-Reauthorize';
+export const REAUTH_URL_HEADER = 'X-Shopify-API-Request-Failure-Reauthorize-Url';
+
+export function verifyToken(routes: Routes, accessMode: AccessMode = DEFAULT_ACCESS_MODE, returnHeader = false) {
   return async function verifyTokenMiddleware(
     ctx: Context,
     next: NextFunction,
@@ -30,6 +33,28 @@ export function verifyToken(routes: Routes, accessMode: AccessMode = DEFAULT_ACC
 
     ctx.cookies.set(TEST_COOKIE_NAME, '1');
 
-    redirectToAuth(routes, ctx);
+    if (returnHeader) {
+      ctx.response.status = 403;
+      ctx.response.set(REAUTH_HEADER, '1');
+
+      let shop: string;
+      if (session) {
+        shop = session.shop;
+      } else if (Shopify.Context.IS_EMBEDDED_APP) {
+        const authHeader: string = ctx.req.headers.authorization;
+        const matches = authHeader?.match(/Bearer (.*)/);
+        if (matches) {
+          const payload = Shopify.Utils.decodeSessionToken(matches[1]);
+          shop = payload.dest.replace('https://', '');
+        }
+      }
+
+      if (shop) {
+        ctx.response.set(REAUTH_URL_HEADER, `${routes.authRoute}?shop=${shop}`);
+      }
+      return;
+    } else {
+      redirectToAuth(routes, ctx);
+    }
   };
 }

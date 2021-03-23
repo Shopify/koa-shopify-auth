@@ -6,8 +6,9 @@ import {Options, Routes} from './types';
 import {DEFAULT_ACCESS_MODE} from '../auth';
 
 export default function verifyRequest(givenOptions: Options = {}) {
-  const {accessMode} = {
+  const {accessMode, returnHeader} = {
     accessMode: DEFAULT_ACCESS_MODE,
+    returnHeader: false,
     ...givenOptions
   };
   const routes: Routes = {
@@ -18,6 +19,6 @@ export default function verifyRequest(givenOptions: Options = {}) {
 
   return compose([
     loginAgainIfDifferentShop(routes, accessMode),
-    verifyToken(routes, accessMode)
+    verifyToken(routes, accessMode, returnHeader)
   ]);
 }

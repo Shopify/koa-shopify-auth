@@ -10,6 +10,8 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 ### Fixed
 ### Added
 
+- Add `returnHeader` option to `verifyRequest`, which allows using the middleware on XHR requests. [78](https://github.com/Shopify/koa-shopify-auth/pull/78)
+
 ## [4.0.3] - 2021-03-16
 
 ### Fixed
