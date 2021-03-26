@@ -10,6 +10,11 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 ### Fixed
 ### Added
 
+## [4.1.1] - 2021-03-26
+
+### Added
+- Bumped `@shopify/shopify-api` version to v1.2.1 to include the new API version (`April21`). [80](https://github.com/Shopify/koa-shopify-auth/pull/80)
+
 ## [4.1.0] - 2021-03-23
 
 ### Added
