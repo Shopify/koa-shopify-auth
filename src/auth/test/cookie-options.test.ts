@@ -13,7 +13,6 @@ describe('Get cookie options', () => {
     });
     const options = getCookieOptions(ctx);
     expect(options).toStrictEqual({
-      sameSite: 'none',
       secure: true,
     });
   });

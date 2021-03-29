@@ -33,7 +33,7 @@ const storageAccessHelper = `(function() {
         window.location.href = this.redirectData.appTargetUrl;
       }
 
-      StorageAccessHelper.prototype.sameSiteNoneIncompatible = function(ua) {
+      StorageAccessHelper.prototype.secureIncompatible = function(ua) {
         return ua.includes("iPhone OS 12_") || ua.includes("iPad; CPU OS 12_") || //iOS 12
         (ua.includes("UCBrowser/")
             ? this.isOlderUcBrowser(ua) //UC Browser < 12.13.2
@@ -56,8 +56,8 @@ const storageAccessHelper = `(function() {
       }
 
       StorageAccessHelper.prototype.setCookie = function(value) {
-        if(!this.sameSiteNoneIncompatible(navigator.userAgent)) {
-          value += '; secure; SameSite=None'
+        if(!this.secureIncompatible(navigator.userAgent)) {
+          value += '; secure'
         }
         document.cookie = value;
       }

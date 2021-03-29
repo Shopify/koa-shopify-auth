@@ -8,6 +8,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
 
 ### Fixed
+- Remove `samesite=none` setting from `cookie-options`. [83](https://github.com/Shopify/koa-shopify-auth/pull/83)
 ### Added
 
 ## [4.1.1] - 2021-03-26
