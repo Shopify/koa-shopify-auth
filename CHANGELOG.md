@@ -6,10 +6,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+### Added
+
+## [4.1.2] - 2021-03-30
 
 ### Fixed
 - Remove `samesite=none` setting from `cookie-options`. [83](https://github.com/Shopify/koa-shopify-auth/pull/83)
-### Added
 
 ## [4.1.1] - 2021-03-26
 
