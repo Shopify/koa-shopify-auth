@@ -9,6 +9,7 @@ import {TEST_COOKIE_NAME, TOP_LEVEL_OAUTH_COOKIE_NAME} from '../index';
 import {Routes} from './types';
 import {redirectToAuth} from './utilities';
 import {DEFAULT_ACCESS_MODE} from '../auth';
+import { HttpResponseError } from '@shopify/shopify-api/dist/error';
 
 export const REAUTH_HEADER = 'X-Shopify-API-Request-Failure-Reauthorize';
 export const REAUTH_URL_HEADER = 'X-Shopify-API-Request-Failure-Reauthorize-Url';
@@ -25,9 +26,21 @@ export function verifyToken(routes: Routes, accessMode: AccessMode = DEFAULT_ACC
       const scopesChanged = !Shopify.Context.SCOPES.equals(session.scope);
 
       if (!scopesChanged && session.accessToken && (!session.expires || session.expires >= new Date())) {
-        ctx.cookies.set(TOP_LEVEL_OAUTH_COOKIE_NAME);
-        await next();
-        return;
+        try {
+          // make a request to make sure oauth has succeeded, retry otherwise
+          const client = new Shopify.Clients.Rest(session.shop, session.accessToken)
+          await client.get({ path: "metafields" }) 
+
+          ctx.cookies.set(TOP_LEVEL_OAUTH_COOKIE_NAME);
+          await next();
+          return;
+        } catch(e) {
+          if (e instanceof HttpResponseError && e.code == 401){
+              // only catch 401 errors
+          } else {
+            throw e
+          }
+        }
       }
     }
 
