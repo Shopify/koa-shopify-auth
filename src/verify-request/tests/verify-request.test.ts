@@ -1,4 +1,5 @@
 import '../../test/test_helper';
+import {AccessMode} from '../../utilities';
 
 import {createMockContext} from '@shopify/jest-koa-mocks';
 import {fetch} from '@shopify/jest-dom-mocks';
@@ -68,7 +69,7 @@ describe('verifyRequest', () => {
       session.scope = 'test_scope';
       await Shopify.Utils.storeSession(session);
 
-      const verifyRequestMiddleware = verifyRequest({ accessMode: 'offline' });
+      const verifyRequestMiddleware = verifyRequest({ accessMode: AccessMode.Offline });
       const ctx = createMockContext({
         url: appUrl(TEST_SHOP),
         headers: { authorization: `Bearer ${jwtToken}` }
