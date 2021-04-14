@@ -1,5 +1,5 @@
 import {Context} from 'koa';
-import {AccessMode} from './utilities/access-mode'
+import {AccessMode} from './utilities'
 
 export interface AuthConfig {
   myShopifyDomain?: string;

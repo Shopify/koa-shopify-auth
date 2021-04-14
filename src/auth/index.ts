@@ -1,6 +1,7 @@
 import {Context} from 'koa';
 
-import {OAuthStartOptions, AccessMode, NextFunction} from '../types';
+import {OAuthStartOptions, NextFunction} from '../types';
+import {AccessMode, isAccessModeOnline} from '../utilities'
 
 import getCookieOptions from './cookie-options';
 import createEnableCookies from './create-enable-cookies';
@@ -11,7 +12,7 @@ import setUserAgent from './set-user-agent';
 import Shopify from '@shopify/shopify-api';
 
 const DEFAULT_MYSHOPIFY_DOMAIN = 'myshopify.com';
-export const DEFAULT_ACCESS_MODE: AccessMode = 'online';
+export const DEFAULT_ACCESS_MODE = AccessMode.Online;
 
 export const TOP_LEVEL_OAUTH_COOKIE_NAME = 'shopifyTopLevelOAuth';
 export const TEST_COOKIE_NAME = 'shopifyTestCookie';
@@ -81,7 +82,7 @@ export default function createShopifyAuth(options: OAuthStartOptions) {
         ctx.res,
         shop,
         oAuthCallbackPath,
-        config.accessMode === 'online'
+        isAccessModeOnline(config.accessMode)
       );
       ctx.redirect(redirectUrl);
       return;
@@ -96,7 +97,7 @@ export default function createShopifyAuth(options: OAuthStartOptions) {
       try {
         await Shopify.Auth.validateAuthCallback(ctx.req, ctx.res, ctx.query);
 
-        ctx.state.shopify = await Shopify.Utils.loadCurrentSession(ctx.req, ctx.res, config.accessMode === 'online');
+        ctx.state.shopify = await Shopify.Utils.loadCurrentSession(ctx.req, ctx.res, isAccessModeOnline(config.accessMode));
 
         if (config.afterAuth) {
           await config.afterAuth(ctx);
