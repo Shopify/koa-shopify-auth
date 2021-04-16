@@ -41,7 +41,12 @@ describe('verifyRequest', () => {
       session.scope = 'test_scope';
       await Shopify.Utils.storeSession(session);
       
-      Shopify.Clients.Rest.prototype.get = jest.fn(() => Promise.resolve({ "body": "" } as RequestReturn));
+      // mocking metafields call from client.get()
+      Shopify.Clients.Rest.prototype.get = jest.fn(({path, query}) => {
+        expect(path).toEqual('metafields');
+        expect(query).toEqual({'limit': 1})
+        return Promise.resolve({ "body": "" } as RequestReturn);
+      });
     });
 
     it('calls next', async () => {
