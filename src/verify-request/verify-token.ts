@@ -3,9 +3,9 @@ import { Session } from '@shopify/shopify-api/dist/auth/session';
 
 import {Context} from 'koa';
 
-import {NextFunction} from '../types';
+import {AccessMode, NextFunction} from '../types';
 import {TEST_COOKIE_NAME, TOP_LEVEL_OAUTH_COOKIE_NAME} from '../index';
-import {AccessMode, isAccessModeOnline} from '../utilities'
+import {isAccessModeOnline} from '../utilities'
 
 import {Routes} from './types';
 import {redirectToAuth} from './utilities';

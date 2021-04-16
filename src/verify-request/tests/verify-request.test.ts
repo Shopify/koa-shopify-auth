@@ -1,5 +1,5 @@
 import '../../test/test_helper';
-import {AccessMode} from '../../utilities';
+import {AccessMode} from '../../types';
 
 import {createMockContext} from '@shopify/jest-koa-mocks';
 import {fetch} from '@shopify/jest-dom-mocks';

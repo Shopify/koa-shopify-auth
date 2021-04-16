@@ -1,5 +1,9 @@
 import {Context} from 'koa';
-import {AccessMode} from './utilities'
+
+export enum AccessMode {
+  Online = 'online',
+  Offline = 'offline',
+}
 
 export interface AuthConfig {
   myShopifyDomain?: string;

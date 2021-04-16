@@ -1,1 +1,1 @@
-export {AccessMode,isAccessModeOnline} from './access-mode'
+export {isAccessModeOnline} from './access-mode'

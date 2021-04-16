@@ -1,5 +1,5 @@
 import '../../test/test_helper';
-import {AccessMode} from '../../utilities';
+import {AccessMode} from '../../types';
 
 // Mock out the entire Shopify lib responses here so we don't have to deal with cookies and the underlying request
 // modules

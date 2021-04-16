@@ -3,8 +3,8 @@ import {Context} from 'koa';
 import Shopify from '@shopify/shopify-api';
 import { Session } from '@shopify/shopify-api/dist/auth/session';
 
-import {NextFunction} from '../types';
-import {AccessMode, isAccessModeOnline} from '../utilities'
+import {AccessMode, NextFunction} from '../types';
+import {isAccessModeOnline} from '../utilities'
 
 import {Routes} from './types';
 import {clearSession, redirectToAuth} from './utilities';

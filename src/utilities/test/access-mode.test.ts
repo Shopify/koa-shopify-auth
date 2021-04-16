@@ -1,4 +1,6 @@
-import {isAccessModeOnline, AccessMode} from '../access-mode';
+import {AccessMode} from '../../types'
+
+import {isAccessModeOnline} from '../access-mode';
 
 describe('Access mode utility functions',()=>{
   it('Checks whether given access mode is online',()=>{

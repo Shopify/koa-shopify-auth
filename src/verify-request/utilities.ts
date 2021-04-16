@@ -3,7 +3,9 @@ import {Context} from 'koa';
 import Shopify from '@shopify/shopify-api';
 
 import {Routes} from './types';
-import {AccessMode, isAccessModeOnline} from '../utilities';
+import {AccessMode} from '../types'
+
+import {isAccessModeOnline} from '../utilities';
 import {DEFAULT_ACCESS_MODE} from '../auth';
 
 export function redirectToAuth(
