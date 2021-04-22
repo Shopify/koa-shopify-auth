@@ -1,9 +1,8 @@
 import '../../test/test_helper';
 
 import {createMockContext} from '@shopify/jest-koa-mocks';
-import {fetch} from '@shopify/jest-dom-mocks';
 import {StatusCode} from '@shopify/network';
-import Shopify from '@shopify/shopify-api';
+import Shopify, { RequestReturn } from '@shopify/shopify-api';
 import jwt from 'jsonwebtoken';
 
 import verifyRequest from '../verify-request';
@@ -11,12 +10,10 @@ import {clearSession} from '../utilities';
 import {TEST_COOKIE_NAME, TOP_LEVEL_OAUTH_COOKIE_NAME} from '../../index';
 import {REAUTH_HEADER, REAUTH_URL_HEADER} from '../verify-token';
 import { clear } from 'console';
-
 const TEST_SHOP = 'testshop.myshopify.io';
 const TEST_USER = '1';
 
 describe('verifyRequest', () => {
-  afterEach(fetch.restore);
 
   describe('when there is an accessToken and shop in session', () => {
     let jwtToken: string;
@@ -43,6 +40,13 @@ describe('verifyRequest', () => {
       session.accessToken = 'test_token';
       session.scope = 'test_scope';
       await Shopify.Utils.storeSession(session);
+      
+      // mocking metafields call from client.get()
+      Shopify.Clients.Rest.prototype.get = jest.fn(({path, query}) => {
+        expect(path).toEqual('metafields');
+        expect(query).toEqual({'limit': 1})
+        return Promise.resolve({ "body": "" } as RequestReturn);
+      });
     });
 
     it('calls next', async () => {
@@ -53,7 +57,6 @@ describe('verifyRequest', () => {
       } as any);
       const next = jest.fn();
 
-      fetch.mock(metaFieldsUrl(TEST_SHOP), StatusCode.Ok);
       await verifyRequestMiddleware(ctx, next);
 
       expect(next).toHaveBeenCalled();
@@ -75,7 +78,6 @@ describe('verifyRequest', () => {
       } as any);
       const next = jest.fn();
 
-      fetch.mock(metaFieldsUrl(TEST_SHOP), StatusCode.Ok);
       await verifyRequestMiddleware(ctx, next);
 
       expect(next).toHaveBeenCalled();
@@ -89,7 +91,6 @@ describe('verifyRequest', () => {
       });
       const next = jest.fn();
 
-      fetch.mock(metaFieldsUrl(TEST_SHOP), StatusCode.Ok);
       await verifyRequestMiddleware(ctx, next);
 
       expect(next).toHaveBeenCalled();
@@ -103,7 +104,6 @@ describe('verifyRequest', () => {
       });
       const next = jest.fn();
 
-      fetch.mock(metaFieldsUrl(TEST_SHOP), StatusCode.Ok);
       await verifyRequestMiddleware(ctx, next);
 
       expect(ctx.cookies.set).toHaveBeenCalledWith(TOP_LEVEL_OAUTH_COOKIE_NAME);
@@ -139,7 +139,6 @@ describe('verifyRequest', () => {
         headers: { authorization: `Bearer ${jwtToken}` }
       });
 
-      fetch.mock(metaFieldsUrl(TEST_SHOP), StatusCode.Ok);
       await verifyRequestMiddleware(ctx, next);
 
       expect(ctx.redirect).toHaveBeenCalledWith(
@@ -162,7 +161,6 @@ describe('verifyRequest', () => {
         headers: { authorization: `Bearer ${jwtToken}` }
       });
 
-      fetch.mock(metaFieldsUrl(TEST_SHOP), StatusCode.Ok);
       await verifyRequestMiddleware(ctx, next);
 
       expect(ctx.redirect).toHaveBeenCalledWith(
@@ -320,10 +318,6 @@ describe('verifyRequest', () => {
     });
   });
 });
-
-function metaFieldsUrl(shop: string) {
-  return `https://${shop}/admin/metafields.json`;
-}
 
 function appUrl(shop?: string) {
   return shop == null ? '/foo' : `/foo?shop=${shop}`;
