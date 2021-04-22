@@ -6,8 +6,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [4.1.3] - 2021-04-22
 ### Fixed
-### Added
+- Fix authentication error if the Shopify session ended before its expiration date [94](https://github.com/Shopify/koa-shopify-auth/pull/94)
 
 ## [4.1.2] - 2021-03-30
 
