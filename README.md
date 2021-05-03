@@ -33,7 +33,7 @@ import Shopify, {ApiVersion} from '@shopify/shopify-api';
 Shopify.Context.initialize({
   API_KEY: 'Your API_KEY',
   API_SECRET_KEY: 'Your API_SECRET_KEY',
-  SCOPES: ['Your scopes'],
+  SCOPES: 'Your comma-separated scopes',
   HOST_NAME: 'Your HOST_NAME (omit the https:// part)',
   API_VERSION: ApiVersion.October20,
   IS_EMBEDDED_APP: true,
