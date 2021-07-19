@@ -1,10 +1,13 @@
 import {Context} from 'koa';
 
-export type AccessMode = 'online' | 'offline';
+export enum AccessMode {
+  Online = 'online',
+  Offline = 'offline',
+}
 
 export interface AuthConfig {
   myShopifyDomain?: string;
-  accessMode?: 'online' | 'offline';
+  accessMode?: AccessMode;
   afterAuth?(ctx: Context): void;
 }
 
