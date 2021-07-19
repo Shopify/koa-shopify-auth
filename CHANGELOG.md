@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- Retry OAuth if cookie / session has expired on callback [112](https://github.com/Shopify/koa-shopify-auth/pull/112)
 
 ## [4.1.3] - 2021-04-22
 ### Fixed
