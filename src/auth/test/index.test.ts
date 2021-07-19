@@ -212,7 +212,7 @@ describe('Index', () => {
       expect(ctx.throw).toHaveBeenCalledWith(400, '');
     });
 
-    it('throws a 403 if the session does not exist', async () => {
+    it('retries if the session does not exist', async () => {
       Shopify.Auth.validateAuthCallback = jest.fn(() => Promise.reject(new Shopify.Errors.SessionNotFound));
 
       const ctx = createMockContext({
@@ -223,7 +223,21 @@ describe('Index', () => {
       const shopifyAuth = createShopifyAuth(baseConfig);
       await shopifyAuth(ctx, nextFunction);
 
-      expect(ctx.throw).toHaveBeenCalledWith(403, '');
+      expect(ctx.redirect).toHaveBeenCalledTimes(1);
+    });
+
+    it('retries if the cookie does not exist', async () => {
+      Shopify.Auth.validateAuthCallback = jest.fn(() => Promise.reject(new Shopify.Errors.CookieNotFound));
+
+      const ctx = createMockContext({
+        url: `${baseCallbackUrl}?${querystring.stringify(queryData)}`,
+        throw: jest.fn(),
+      });
+
+      const shopifyAuth = createShopifyAuth(baseConfig);
+      await shopifyAuth(ctx, nextFunction);
+
+      expect(ctx.redirect).toHaveBeenCalledTimes(1);
     });
 
     it('throws a 500 on any other errors', async () => {
