@@ -29,7 +29,7 @@ export function verifyToken(routes: Routes, accessMode: AccessMode = DEFAULT_ACC
         try {
           // make a request to make sure oauth has succeeded, retry otherwise
           const client = new Shopify.Clients.Rest(session.shop, session.accessToken)
-          await client.get({ path: "metafields", query: {'limit': 1} }) 
+          await client.get({path: 'shop'});
 
           ctx.cookies.set(TOP_LEVEL_OAUTH_COOKIE_NAME);
           await next();

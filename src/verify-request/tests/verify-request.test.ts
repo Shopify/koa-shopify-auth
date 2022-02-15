@@ -1,7 +1,6 @@
 import '../../test/test_helper';
 
 import {createMockContext} from '@shopify/jest-koa-mocks';
-import {StatusCode} from '@shopify/network';
 import Shopify, { RequestReturn } from '@shopify/shopify-api';
 import jwt from 'jsonwebtoken';
 
@@ -9,7 +8,6 @@ import verifyRequest from '../verify-request';
 import {clearSession} from '../utilities';
 import {TEST_COOKIE_NAME, TOP_LEVEL_OAUTH_COOKIE_NAME} from '../../index';
 import {REAUTH_HEADER, REAUTH_URL_HEADER} from '../verify-token';
-import { clear } from 'console';
 const TEST_SHOP = 'testshop.myshopify.io';
 const TEST_USER = '1';
 
@@ -41,10 +39,9 @@ describe('verifyRequest', () => {
       session.scope = 'test_scope';
       await Shopify.Utils.storeSession(session);
       
-      // mocking metafields call from client.get()
-      Shopify.Clients.Rest.prototype.get = jest.fn(({path, query}) => {
-        expect(path).toEqual('metafields');
-        expect(query).toEqual({'limit': 1})
+      // mocking shop call from client.get()
+      Shopify.Clients.Rest.prototype.get = jest.fn(({path}) => {
+        expect(path).toEqual('shop');
         return Promise.resolve({ "body": "" } as RequestReturn);
       });
     });
