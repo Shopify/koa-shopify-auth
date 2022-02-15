@@ -161,6 +161,7 @@ app.use(
   shopifyAuth({
     async afterAuth(ctx) {
       const { shop, accessToken } = ctx.state.shopify;
+      const host = ctx.query.host;
       ACTIVE_SHOPIFY_SHOPS[shop] = true;
 
       // Your app should handle the APP_UNINSTALLED webhook to make sure merchants go through OAuth if they reinstall it
@@ -178,8 +179,8 @@ app.use(
         );
       }
 
-      // Redirect to app with shop parameter upon auth
-      ctx.redirect(`/?shop=${shop}`);
+      // Redirect to app with shop and host parameter upon auth
+      ctx.redirect(`/?shop=${shop}&host=${host}`);
     },
   }),
 );
