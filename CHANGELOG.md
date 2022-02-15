@@ -7,6 +7,8 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [4.1.5] - 2022-02-15
+
 ### Fixed
 - Replace deprecated metafields API request used for oauth token check with longer lived call to the shop endpoint [144](https://github.com/Shopify/koa-shopify-auth/pull/144)
 
