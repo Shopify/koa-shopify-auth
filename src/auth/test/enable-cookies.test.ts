@@ -12,8 +12,7 @@ const baseUrl = 'myapp.com/auth';
 const shop = 'shop1.myshopify.io';
 const shopOrigin = 'https://shop1.myshopify.io';
 
-const baseConfig = {
-};
+const baseConfig = {};
 
 const baseConfigWithPrefix = {
   ...baseConfig,

@@ -1,5 +1,5 @@
-import Shopify, { ApiVersion } from "@shopify/shopify-api";
-import { MemorySessionStorage } from "@shopify/shopify-api/dist/auth/session";
+import Shopify, {ApiVersion} from '@shopify/shopify-api';
+import {MemorySessionStorage} from '@shopify/shopify-api/dist/auth/session';
 
 beforeEach(() => {
   // We want to reset the Context object on every run so that tests start with a consistent state

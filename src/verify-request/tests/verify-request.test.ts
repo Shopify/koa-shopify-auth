@@ -1,7 +1,7 @@
 import '../../test/test_helper';
 
 import {createMockContext} from '@shopify/jest-koa-mocks';
-import Shopify, { RequestReturn } from '@shopify/shopify-api';
+import Shopify, {RequestReturn} from '@shopify/shopify-api';
 import jwt from 'jsonwebtoken';
 
 import verifyRequest from '../verify-request';
@@ -12,7 +12,6 @@ const TEST_SHOP = 'testshop.myshopify.io';
 const TEST_USER = '1';
 
 describe('verifyRequest', () => {
-
   describe('when there is an accessToken and shop in session', () => {
     let jwtToken: string;
     const jwtSessionId = Shopify.Auth.getJwtSessionId(TEST_SHOP, TEST_USER);
@@ -30,7 +29,9 @@ describe('verifyRequest', () => {
         sid: 'abc123',
       };
 
-      jwtToken = jwt.sign(jwtPayload, Shopify.Context.API_SECRET_KEY, { algorithm: 'HS256' });
+      jwtToken = jwt.sign(jwtPayload, Shopify.Context.API_SECRET_KEY, {
+        algorithm: 'HS256',
+      });
 
       const session = new Shopify.Session.Session(jwtSessionId);
       session.shop = TEST_SHOP;
@@ -38,11 +39,11 @@ describe('verifyRequest', () => {
       session.accessToken = 'test_token';
       session.scope = 'test_scope';
       await Shopify.Utils.storeSession(session);
-      
+
       // mocking shop call from client.get()
       Shopify.Clients.Rest.prototype.get = jest.fn(({path}) => {
         expect(path).toEqual('shop');
-        return Promise.resolve({ "body": "" } as RequestReturn);
+        return Promise.resolve({body: ''} as RequestReturn);
       });
     });
 
@@ -50,7 +51,7 @@ describe('verifyRequest', () => {
       const verifyRequestMiddleware = verifyRequest();
       const ctx = createMockContext({
         url: appUrl(TEST_SHOP),
-        headers: { authorization: `Bearer ${jwtToken}` }
+        headers: {authorization: `Bearer ${jwtToken}`},
       } as any);
       const next = jest.fn();
 
@@ -60,7 +61,9 @@ describe('verifyRequest', () => {
     });
 
     it('calls next for offline sessions', async () => {
-      const session = new Shopify.Session.Session(Shopify.Auth.getOfflineSessionId(TEST_SHOP));
+      const session = new Shopify.Session.Session(
+        Shopify.Auth.getOfflineSessionId(TEST_SHOP),
+      );
       session.shop = TEST_SHOP;
       session.isOnline = false;
       session.expires = new Date(Date.now() + 86400000);
@@ -68,10 +71,10 @@ describe('verifyRequest', () => {
       session.scope = 'test_scope';
       await Shopify.Utils.storeSession(session);
 
-      const verifyRequestMiddleware = verifyRequest({ accessMode: 'offline' });
+      const verifyRequestMiddleware = verifyRequest({accessMode: 'offline'});
       const ctx = createMockContext({
         url: appUrl(TEST_SHOP),
-        headers: { authorization: `Bearer ${jwtToken}` }
+        headers: {authorization: `Bearer ${jwtToken}`},
       } as any);
       const next = jest.fn();
 
@@ -84,7 +87,7 @@ describe('verifyRequest', () => {
       const verifyRequestMiddleware = verifyRequest();
       const ctx = createMockContext({
         url: appUrl(),
-        headers: { authorization: `Bearer ${jwtToken}` }
+        headers: {authorization: `Bearer ${jwtToken}`},
       });
       const next = jest.fn();
 
@@ -97,7 +100,7 @@ describe('verifyRequest', () => {
       const verifyRequestMiddleware = verifyRequest();
       const ctx = createMockContext({
         url: appUrl(TEST_SHOP),
-        headers: { authorization: `Bearer ${jwtToken}` }
+        headers: {authorization: `Bearer ${jwtToken}`},
       });
       const next = jest.fn();
 
@@ -114,7 +117,7 @@ describe('verifyRequest', () => {
       const ctx = createMockContext({
         url: appUrl(TEST_SHOP),
         redirect: jest.fn(),
-        headers: { authorization: `Bearer ${jwtToken}` },
+        headers: {authorization: `Bearer ${jwtToken}`},
       });
 
       await expireJwtSession(jwtSessionId);
@@ -133,7 +136,7 @@ describe('verifyRequest', () => {
       const ctx = createMockContext({
         url: appUrl('some_other_shop.myshopify.io'),
         redirect: jest.fn(),
-        headers: { authorization: `Bearer ${jwtToken}` }
+        headers: {authorization: `Bearer ${jwtToken}`},
       });
 
       await verifyRequestMiddleware(ctx, next);
@@ -146,7 +149,9 @@ describe('verifyRequest', () => {
     it('redirects to authRoute if the session scopes are different than the current setting', async () => {
       const authRoute = '/my-auth-route';
 
-      const session = await Shopify.Context.SESSION_STORAGE.loadSession(jwtSessionId);
+      const session = await Shopify.Context.SESSION_STORAGE.loadSession(
+        jwtSessionId,
+      );
       session.scope = 'different_scope';
       await Shopify.Utils.storeSession(session);
 
@@ -155,7 +160,7 @@ describe('verifyRequest', () => {
       const ctx = createMockContext({
         url: appUrl(TEST_SHOP),
         redirect: jest.fn(),
-        headers: { authorization: `Bearer ${jwtToken}` }
+        headers: {authorization: `Bearer ${jwtToken}`},
       });
 
       await verifyRequestMiddleware(ctx, next);
@@ -167,14 +172,16 @@ describe('verifyRequest', () => {
 
     it('returns a header if setting is active', async () => {
       // Session exists but has already expired
-      const session = await Shopify.Context.SESSION_STORAGE.loadSession(jwtSessionId);
+      const session = await Shopify.Context.SESSION_STORAGE.loadSession(
+        jwtSessionId,
+      );
       session.expires = new Date(Date.now() - 10);
       await Shopify.Utils.storeSession(session);
 
       const verifyRequestMiddleware = verifyRequest({returnHeader: true});
       const ctx = createMockContext({
         redirect: jest.fn(),
-        headers: { authorization: `Bearer ${jwtToken}` }
+        headers: {authorization: `Bearer ${jwtToken}`},
       });
       const next = jest.fn();
 
@@ -182,10 +189,12 @@ describe('verifyRequest', () => {
 
       expect(ctx.redirect).not.toHaveBeenCalled();
       expect(ctx.response.status).toBe(403);
-      expect(ctx.response.headers).toEqual(expect.objectContaining({
-        [REAUTH_HEADER.toLowerCase()]: '1',
-        [REAUTH_URL_HEADER.toLowerCase()]: `/auth?shop=${TEST_SHOP}`,
-      }));
+      expect(ctx.response.headers).toEqual(
+        expect.objectContaining({
+          [REAUTH_HEADER.toLowerCase()]: '1',
+          [REAUTH_URL_HEADER.toLowerCase()]: `/auth?shop=${TEST_SHOP}`,
+        }),
+      );
     });
   });
 
@@ -258,7 +267,7 @@ describe('verifyRequest', () => {
       expect(ctx.redirect).toHaveBeenCalledWith(fallbackRoute);
     });
 
-    it('does not fail to clear the current session', async() => {
+    it('does not fail to clear the current session', async () => {
       const jwtPayload = {
         iss: `https://${TEST_SHOP}/admin`,
         dest: `https://${TEST_SHOP}`,
@@ -271,12 +280,14 @@ describe('verifyRequest', () => {
         sid: 'abc123',
       };
 
-      const jwtToken = jwt.sign(jwtPayload, Shopify.Context.API_SECRET_KEY, { algorithm: 'HS256' });
+      const jwtToken = jwt.sign(jwtPayload, Shopify.Context.API_SECRET_KEY, {
+        algorithm: 'HS256',
+      });
 
       const ctx = createMockContext({
         url: appUrl('some_other_shop.myshopify.io'),
         redirect: jest.fn(),
-        headers: { authorization: `Bearer ${jwtToken}` }
+        headers: {authorization: `Bearer ${jwtToken}`},
       });
 
       expect(await clearSession(ctx)).toBeUndefined();
@@ -295,12 +306,14 @@ describe('verifyRequest', () => {
         sid: 'abc123',
       };
 
-      const jwtToken = jwt.sign(jwtPayload, Shopify.Context.API_SECRET_KEY, { algorithm: 'HS256' });
+      const jwtToken = jwt.sign(jwtPayload, Shopify.Context.API_SECRET_KEY, {
+        algorithm: 'HS256',
+      });
 
       const verifyRequestMiddleware = verifyRequest({returnHeader: true});
       const ctx = createMockContext({
         redirect: jest.fn(),
-        headers: { authorization: `Bearer ${jwtToken}` }
+        headers: {authorization: `Bearer ${jwtToken}`},
       });
       const next = jest.fn();
 
@@ -308,10 +321,12 @@ describe('verifyRequest', () => {
 
       expect(ctx.redirect).not.toHaveBeenCalled();
       expect(ctx.response.status).toBe(403);
-      expect(ctx.response.headers).toEqual(expect.objectContaining({
-        [REAUTH_HEADER.toLowerCase()]: '1',
-        [REAUTH_URL_HEADER.toLowerCase()]: `/auth?shop=${TEST_SHOP}`,
-      }));
+      expect(ctx.response.headers).toEqual(
+        expect.objectContaining({
+          [REAUTH_HEADER.toLowerCase()]: '1',
+          [REAUTH_URL_HEADER.toLowerCase()]: `/auth?shop=${TEST_SHOP}`,
+        }),
+      );
     });
   });
 });

@@ -20,11 +20,17 @@ export function redirectToAuth(
   ctx.redirect(routeForRedirect);
 }
 
-export async function clearSession(ctx: Context, accessMode: AccessMode = DEFAULT_ACCESS_MODE) {
+export async function clearSession(
+  ctx: Context,
+  accessMode: AccessMode = DEFAULT_ACCESS_MODE,
+) {
   try {
-    await Shopify.Utils.deleteCurrentSession(ctx.req, ctx.res, accessMode === 'online');
-  }
-  catch (error) {
+    await Shopify.Utils.deleteCurrentSession(
+      ctx.req,
+      ctx.res,
+      accessMode === 'online',
+    );
+  } catch (error) {
     if (error instanceof Shopify.Errors.SessionNotFound) {
       // We can just move on if no sessions were cleared
     } else {

@@ -22,9 +22,13 @@ describe('setUserAgent', () => {
     Shopify.Context.initialize(Shopify.Context);
 
     setUserAgent();
-    expect(Shopify.Context.USER_AGENT_PREFIX).toEqual(`${testPrefix} | ${KOA_USER_AGENT_PREFIX}`);
+    expect(Shopify.Context.USER_AGENT_PREFIX).toEqual(
+      `${testPrefix} | ${KOA_USER_AGENT_PREFIX}`,
+    );
 
     setUserAgent();
-    expect(Shopify.Context.USER_AGENT_PREFIX).toEqual(`${testPrefix} | ${KOA_USER_AGENT_PREFIX}`);
+    expect(Shopify.Context.USER_AGENT_PREFIX).toEqual(
+      `${testPrefix} | ${KOA_USER_AGENT_PREFIX}`,
+    );
   });
 });
