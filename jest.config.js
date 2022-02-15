@@ -3,9 +3,7 @@ module.exports = {
   transform: {
     '^.+\\.[t|j]sx?$': 'babel-jest',
   },
-  watchPathIgnorePatterns: [
-    '<rootDir>/node_modules/',
-  ],
+  watchPathIgnorePatterns: ['<rootDir>/node_modules/'],
   testRegex: '.*\\.test\\.tsx?$',
   coverageDirectory: './coverage/',
   collectCoverage: true,

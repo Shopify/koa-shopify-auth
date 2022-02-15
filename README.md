@@ -57,7 +57,7 @@ app.use(
     accessMode: 'offline',
     // callback for when auth is completed
     afterAuth(ctx) {
-      const { shop, accessToken } = ctx.state.shopify;
+      const {shop, accessToken} = ctx.state.shopify;
 
       console.log('We did it!', accessToken);
 
@@ -126,12 +126,12 @@ This example will enable you to quickly set up the backend for a working develop
 import 'isomorphic-fetch';
 
 import Koa from 'koa';
-import Router from "koa-router";
+import Router from 'koa-router';
 import shopifyAuth, {verifyRequest} from '@shopify/koa-shopify-auth';
 import Shopify, {ApiVersion} from '@shopify/shopify-api';
 
 // Loads the .env file into process.env. This is usually done using actual environment variables in production
-import dotenv from "dotenv";
+import dotenv from 'dotenv';
 dotenv.config();
 
 const port = parseInt(process.env.PORT, 10) || 8081;
@@ -160,21 +160,22 @@ app.keys = [Shopify.Context.API_SECRET_KEY];
 app.use(
   shopifyAuth({
     async afterAuth(ctx) {
-      const { shop, accessToken } = ctx.state.shopify;
+      const {shop, accessToken} = ctx.state.shopify;
       ACTIVE_SHOPIFY_SHOPS[shop] = true;
 
       // Your app should handle the APP_UNINSTALLED webhook to make sure merchants go through OAuth if they reinstall it
       const response = await Shopify.Webhooks.Registry.register({
         shop,
         accessToken,
-        path: "/webhooks",
-        topic: "APP_UNINSTALLED",
-        webhookHandler: async (topic, shop, body) => delete ACTIVE_SHOPIFY_SHOPS[shop],
+        path: '/webhooks',
+        topic: 'APP_UNINSTALLED',
+        webhookHandler: async (topic, shop, body) =>
+          delete ACTIVE_SHOPIFY_SHOPS[shop],
       });
 
       if (!response.success) {
         console.log(
-          `Failed to register APP_UNINSTALLED webhook: ${response.result}`
+          `Failed to register APP_UNINSTALLED webhook: ${response.result}`,
         );
       }
 
@@ -184,7 +185,7 @@ app.use(
   }),
 );
 
-router.get("/", async (ctx) => {
+router.get('/', async (ctx) => {
   const shop = ctx.query.shop;
 
   // If this shop hasn't been seen yet, go through OAuth to create a session
@@ -196,7 +197,7 @@ router.get("/", async (ctx) => {
   }
 });
 
-router.post("/webhooks", async (ctx) => {
+router.post('/webhooks', async (ctx) => {
   try {
     await Shopify.Webhooks.Registry.process(ctx.req, ctx.res);
     console.log(`Webhook processed, returned status code 200`);
@@ -206,7 +207,7 @@ router.post("/webhooks", async (ctx) => {
 });
 
 // Everything else must have sessions
-router.get("(.*)", verifyRequest(), async (ctx) => {
+router.get('(.*)', verifyRequest(), async (ctx) => {
   // Your application code goes here
 });
 

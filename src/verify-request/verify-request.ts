@@ -9,7 +9,7 @@ export default function verifyRequest(givenOptions: Options = {}) {
   const {accessMode, returnHeader} = {
     accessMode: DEFAULT_ACCESS_MODE,
     returnHeader: false,
-    ...givenOptions
+    ...givenOptions,
   };
   const routes: Routes = {
     authRoute: '/auth',
@@ -19,6 +19,6 @@ export default function verifyRequest(givenOptions: Options = {}) {
 
   return compose([
     loginAgainIfDifferentShop(routes, accessMode),
-    verifyToken(routes, accessMode, returnHeader)
+    verifyToken(routes, accessMode, returnHeader),
   ]);
 }

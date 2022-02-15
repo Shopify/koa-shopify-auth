@@ -1,6 +1,4 @@
 module.exports = {
-  presets: [
-    ['babel-preset-shopify/node', {typescript: true}]
-  ],
+  presets: [['babel-preset-shopify/node', {typescript: true}]],
   sourceMaps: 'inline',
 };
