@@ -5,6 +5,7 @@ import {Context} from 'koa';
 
 import {AccessMode, NextFunction} from '../types';
 import {TEST_COOKIE_NAME, TOP_LEVEL_OAUTH_COOKIE_NAME} from '../index';
+import {isAccessModeOnline} from '../utilities'
 
 import {Routes} from './types';
 import {redirectToAuth} from './utilities';
@@ -20,7 +21,7 @@ export function verifyToken(routes: Routes, accessMode: AccessMode = DEFAULT_ACC
     next: NextFunction,
   ) {
     let session: Session | undefined;
-    session = await Shopify.Utils.loadCurrentSession(ctx.req, ctx.res, accessMode === 'online');
+    session = await Shopify.Utils.loadCurrentSession(ctx.req, ctx.res, isAccessModeOnline(accessMode));
 
     if (session) {
       const scopesChanged = !Shopify.Context.SCOPES.equals(session.scope);

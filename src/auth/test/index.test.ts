@@ -1,4 +1,5 @@
 import '../../test/test_helper';
+import {AccessMode} from '../../types';
 
 // Mock out the entire Shopify lib responses here so we don't have to deal with cookies and the underlying request
 // modules
@@ -31,7 +32,7 @@ const baseUrl = 'https://myapp.com/auth';
 const shop = 'test-shop.myshopify.io';
 
 const baseConfig: OAuthStartOptions = {
-  accessMode: 'offline',
+  accessMode: AccessMode.Offline,
 };
 
 function nextFunction() {}
@@ -172,7 +173,7 @@ describe('Index', () => {
         throw: jest.fn(),
       });
 
-      const shopifyAuth = createShopifyAuth({...baseConfig, accessMode: 'offline'});
+      const shopifyAuth = createShopifyAuth({...baseConfig, accessMode: AccessMode.Offline});
       await shopifyAuth(ctx, nextFunction);
 
       expect(ctx.throw).not.toHaveBeenCalled();
