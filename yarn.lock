@@ -1244,10 +1244,10 @@
   resolved "https://registry.yarnpkg.com/@shopify/prettier-config/-/prettier-config-1.1.2.tgz#612f87c0cd1196e8b43c85425e587d0fa7f1172d"
   integrity sha512-5ugCL9sPGzmOaZjeRGaWUWhHgAbemrS6z+R7v6gwiD+BiqSeoFhIY+imLpfdFCVpuOGalpHeCv6o3gv++EHs0A==
 
-"@shopify/shopify-api@^1.2.1":
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/@shopify/shopify-api/-/shopify-api-1.2.1.tgz#dbe9944dd92dc8c77b2c96217e1cf923af94ceda"
-  integrity sha512-a2xNAQovf8WYGEAvjrdSK2bY3+XWuFgIfPhtxkO+QAMILb3dIk+Cxtbo1gaC1fD170AjwZ6gVl5RQbpe9ZVsfw==
+"@shopify/shopify-api@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@shopify/shopify-api/-/shopify-api-2.1.0.tgz#750519188cf4cad8c65170ed05e4bd4aa65a5285"
+  integrity sha512-CI+CUc0b2+Iv4AFhKaIAvMpbTddyTIKM3O2Qk0wS1gcj5nRdSFg6JbeVThNOYYu/7rzf93J8qYF1E4OZl920CQ==
   dependencies:
     "@shopify/network" "^1.5.1"
     "@types/jsonwebtoken" "^8.5.0"
