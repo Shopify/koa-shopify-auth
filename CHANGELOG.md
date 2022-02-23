@@ -7,6 +7,10 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- Replace deprecated EASDK call with App Bridge [148](https://github.com/Shopify/koa-shopify-auth/pull/148)
+
 ## [4.1.5] - 2022-02-15
 
 ### Fixed

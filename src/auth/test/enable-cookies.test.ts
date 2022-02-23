@@ -11,6 +11,7 @@ const query = querystring.stringify.bind(querystring);
 const baseUrl = 'myapp.com/auth';
 const shop = 'shop1.myshopify.io';
 const shopOrigin = 'https://shop1.myshopify.io';
+const host = 'this_is_definitely_a_host_string';
 
 const baseConfig = {};
 
@@ -23,7 +24,7 @@ describe('CreateEnableCookies', () => {
   it('sets body to the enable cookies HTML page', () => {
     const enableCookies = createEnableCookies(baseConfig);
     const ctx = createMockContext({
-      url: `https://${baseUrl}?${query({shop})}`,
+      url: `https://${baseUrl}?${query({shop, host})}`,
     });
 
     enableCookies(ctx);
@@ -31,14 +32,16 @@ describe('CreateEnableCookies', () => {
     expect(ctx.body).toContain('CookiePartitionPrompt');
     expect(ctx.body).toContain(Shopify.Context.API_KEY);
     expect(ctx.body).toContain(shopOrigin);
-    expect(ctx.body).toContain(`redirectUrl: "/auth?shop=${shop}"`);
+    expect(ctx.body).toContain(
+      `redirectUrl: "/auth?shop=${shop}&host=${host}"`,
+    );
   });
 
   it('sets body to the enable cookies HTML page with prefix', () => {
     const {prefix} = baseConfigWithPrefix;
     const enableCookies = createEnableCookies(baseConfigWithPrefix);
     const ctx = createMockContext({
-      url: `https://${baseUrl}?${query({shop})}`,
+      url: `https://${baseUrl}?${query({shop, host})}`,
     });
 
     enableCookies(ctx);
@@ -46,7 +49,9 @@ describe('CreateEnableCookies', () => {
     expect(ctx.body).toContain('CookiePartitionPrompt');
     expect(ctx.body).toContain(Shopify.Context.API_KEY);
     expect(ctx.body).toContain(shopOrigin);
-    expect(ctx.body).toContain(`redirectUrl: "${prefix}/auth?shop=${shop}"`);
+    expect(ctx.body).toContain(
+      `redirectUrl: "${prefix}/auth?shop=${shop}&host=${host}"`,
+    );
   });
 
   it('throws a 400 if there is no shop', () => {
