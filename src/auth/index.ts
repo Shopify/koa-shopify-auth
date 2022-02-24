@@ -95,10 +95,19 @@ export default function createShopifyAuth(options: OAuthStartOptions) {
 
     if (ctx.path === oAuthCallbackPath) {
       try {
+        const authQuery: AuthQuery = {
+          code: ctx.query.code as string,
+          shop: ctx.query.shop as string,
+          host: ctx.query.host as string,
+          state: ctx.query.state as string,
+          timestamp: ctx.query.timestamp as string,
+          hmac: ctx.query.hmac as string,
+        };
+
         ctx.state.shopify = await Shopify.Auth.validateAuthCallback(
           ctx.req,
           ctx.res,
-          ctx.query as unknown as AuthQuery,
+          authQuery,
         );
 
         if (config.afterAuth) {
