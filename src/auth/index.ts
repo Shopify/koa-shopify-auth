@@ -71,7 +71,7 @@ export default function createShopifyAuth(options: OAuthStartOptions) {
       ctx.path === inlineOAuthPath ||
       (ctx.path === oAuthStartPath && shouldPerformInlineOAuth(ctx))
     ) {
-      const shop: string = ctx.query.shop as string;
+      const shop = ctx.query.shop as string;
       if (shop == null) {
         ctx.throw(400);
       }
