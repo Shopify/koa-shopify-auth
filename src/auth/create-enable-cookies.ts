@@ -19,7 +19,7 @@ const ACTION = 'Enable cookies';
 export default function createEnableCookies({prefix}: OAuthStartOptions) {
   return function enableCookies(ctx: Context) {
     const {query} = ctx;
-    const {shop} = query;
+    const {shop, host} = query;
 
     if (shop == null) {
       ctx.throw(400, Error.ShopParamMissing);
@@ -39,10 +39,11 @@ export default function createEnableCookies({prefix}: OAuthStartOptions) {
 
   <script>
     window.apiKey = "${Shopify.Context.API_KEY}";
+    window.host = "${host}";
     window.shopOrigin = "https://${encodeURIComponent(shop)}";
 
     ${itpHelper}
-    ${topLevelInteraction(shop, prefix)}
+    ${topLevelInteraction(shop, host, prefix)}
   </script>
 </head>
 <body>

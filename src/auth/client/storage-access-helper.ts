@@ -16,13 +16,16 @@ const storageAccessHelper = `(function() {
 
         normalizedLink.href = this.setNormalizedLink(storageAccessStatus);
 
-        data = JSON.stringify({
-          message: 'Shopify.API.remoteRedirect',
-          data: {
-            location: normalizedLink.href,
-          }
+        var AppBridge = window['app-bridge'];
+        var createApp = AppBridge.default;
+        var Redirect = AppBridge.actions.Redirect;
+        var app = createApp({
+          apiKey: window.apiKey,
+          host: window.host,
+          shopOrigin: window.shopOrigin.replace(/^https:\\\/\\\//, ''),
         });
-        window.parent.postMessage(data, this.redirectData.myshopifyUrl);
+        var redirect = Redirect.create(app);
+        redirect.dispatch(Redirect.Action.REMOTE, normalizedLink.href);
       }
 
       StorageAccessHelper.prototype.redirectToAppsIndex = function() {

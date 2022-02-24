@@ -95,12 +95,10 @@ export default function createShopifyAuth(options: OAuthStartOptions) {
 
     if (ctx.path === oAuthCallbackPath) {
       try {
-        await Shopify.Auth.validateAuthCallback(ctx.req, ctx.res, ctx.query);
-
-        ctx.state.shopify = await Shopify.Utils.loadCurrentSession(
+        ctx.state.shopify = await Shopify.Auth.validateAuthCallback(
           ctx.req,
           ctx.res,
-          config.accessMode === 'online',
+          ctx.query,
         );
 
         if (config.afterAuth) {

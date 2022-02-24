@@ -1,6 +1,14 @@
-export default function redirectionScript({origin, redirectTo, apiKey}) {
+import fs from 'fs';
+import path from 'path';
+
+const APP_BRIDGE_SCRIPT = fs.readFileSync(
+  path.resolve(`${__dirname}/../app-bridge-2.0.12.js`),
+);
+
+export default function redirectionScript({origin, redirectTo, apiKey, host}) {
   return `
-    <script src="https://unpkg.com/@shopify/app-bridge@^1"></script> <script type="text/javascript">
+    <script>${APP_BRIDGE_SCRIPT}</script>
+    <script type="text/javascript">
       document.addEventListener('DOMContentLoaded', function() {
         if (window.top === window.self) {
           // If the current window is the 'parent', change the URL by setting location.href
@@ -12,6 +20,7 @@ export default function redirectionScript({origin, redirectTo, apiKey}) {
           var Redirect = AppBridge.actions.Redirect;
           var app = createApp({
             apiKey: "${apiKey}",
+            host: "${host}",
             shopOrigin: "${encodeURI(origin)}",
           });
           var redirect = Redirect.create(app);

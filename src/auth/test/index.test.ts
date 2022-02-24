@@ -38,14 +38,15 @@ const baseConfig: OAuthStartOptions = {
 function nextFunction() {}
 
 describe('Index', () => {
+  const session = new Shopify.Session.Session('test_session');
+  session.shop = shop;
+  session.accessToken = 'test_token';
+
   beforeEach(() => {
     Shopify.Auth.beginAuth = jest.fn(() =>
       Promise.resolve(`https://${shop}/auth/callback`),
     );
 
-    const session = new Shopify.Session.Session('test_session');
-    session.shop = shop;
-    session.accessToken = 'test_token';
     Shopify.Utils.loadCurrentSession = jest.fn(() => Promise.resolve(session));
   });
 
@@ -153,7 +154,9 @@ describe('Index', () => {
     };
 
     beforeEach(() => {
-      Shopify.Auth.validateAuthCallback = jest.fn(() => Promise.resolve());
+      Shopify.Auth.validateAuthCallback = jest.fn(() =>
+        Promise.resolve(session),
+      );
     });
 
     it('performs oauth callback', async () => {
