@@ -25,7 +25,8 @@ export default function createRequestStorageAccess({
 }: OAuthStartOptions) {
   return function requestStorage(ctx: Context) {
     const {query} = ctx;
-    const {shop, host} = query;
+    const shop = query.shop as string;
+    const host = query.host as string;
 
     if (shop == null) {
       ctx.throw(400, Error.ShopParamMissing);
