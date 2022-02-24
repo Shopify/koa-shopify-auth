@@ -35,7 +35,8 @@
   "include": [
     "../../config/typescript/**/*",
     "./src/**/*.ts",
-    "./src/**/*.tsx"
+    "./src/**/*.tsx",
+    "./src/app-bridge-*.js"
   ],
   "exclude": ["**/*.test.ts", "**/*.test.tsx", "**/test_helper.ts"]
 }

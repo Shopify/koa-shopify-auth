@@ -19,7 +19,8 @@ const ACTION = 'Enable cookies';
 export default function createEnableCookies({prefix}: OAuthStartOptions) {
   return function enableCookies(ctx: Context) {
     const {query} = ctx;
-    const {shop, host} = query;
+    const shop = query.shop as string;
+    const host = query.host as string;
 
     if (shop == null) {
       ctx.throw(400, Error.ShopParamMissing);

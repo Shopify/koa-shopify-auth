@@ -7,6 +7,10 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- Make sure the bundled package includes the App Bridge lib [150](https://github.com/Shopify/koa-shopify-auth/pull/150)
+
 ## [5.0.0] - 2022-02-24
 
 ### Fixed
