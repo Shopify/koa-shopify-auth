@@ -173,9 +173,9 @@ app.use(
           delete ACTIVE_SHOPIFY_SHOPS[shop],
       });
 
-      if (!response.success) {
+      if (!response['APP_UNINSTALLED'].success) {
         console.log(
-          `Failed to register APP_UNINSTALLED webhook: ${response.result}`,
+          `Failed to register APP_UNINSTALLED webhook: ${response['APP_UNINSTALLED'].result}`,
         );
       }
 
