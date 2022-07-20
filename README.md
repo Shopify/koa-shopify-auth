@@ -1,4 +1,6 @@
-# `@shopify/koa-shopify-auth`
+# DEPRECATED `@shopify/koa-shopify-auth`
+
+NOTE: this repo is no longer maintained. See [simple-koa-shopify-auth](https://github.com/TheSecurityDev/simple-koa-shopify-auth) for a potential community solution.
 
 ![Build Status](https://github.com/Shopify/koa-shopify-auth/workflows/CI/badge.svg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE.md) [![npm version](https://badge.fury.io/js/%40shopify%2Fkoa-shopify-auth.svg)](https://badge.fury.io/js/%40shopify%2Fkoa-shopify-auth)
