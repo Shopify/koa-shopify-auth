@@ -19,17 +19,15 @@ pulls:
 
   # Comment to post when marking as stale. Set to `false` to disable
   markComment: >
-    As this repo is deprecated and no longer supported, this pull request has been
-    automatically marked with a Will Not Review label and will be closed automatically.
+    Note that this repo is no longer maintained and this PR will not be reviewed.
+    Prefer the [official JavaScript API library](https://github.com/Shopify/shopify-api-js).
+    If you're still wanting to use Koa, see
+    [simple-koa-shopify-auth](https://github.com/TheSecurityDev/simple-koa-shopify-auth)
+    for a potential community solution.
 
 issues:
   # Number of days of inactivity before an Issue or Pull Request becomes stale
-  # TO-DO: the real value will be 90, this version is for testing
   daysUntilStale: 0
-
-  # Issues labeled `Confirmed` are ignored
-  exemptLabels:
-    - Confirmed
 
   # Number of days of inactivity before an Issue with the stale label is closed.
   # Set to false to disable. If disabled, issues still need to be closed manually,
@@ -38,5 +36,8 @@ issues:
 
   # Comment to post when marking as stale. Set to `false` to disable
   markComment: >
-    As this repo is deprecated and no longer supported, this issue will not be reviewed
-    and will be closed automatically.
+    Note that this repo is no longer maintained and this issue will not be reviewed.
+    Prefer the [official JavaScript API library](https://github.com/Shopify/shopify-api-js).
+    If you're still wanting to use Koa, see
+    [simple-koa-shopify-auth](https://github.com/TheSecurityDev/simple-koa-shopify-auth)
+    for a potential community solution.
