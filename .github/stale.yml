@@ -1,0 +1,43 @@
+# Configuration for probot-stale - https://github.com/probot/stale
+
+# Issues or Pull Requests with these labels will never be considered stale.
+# Set to `[]` to disable
+exemptLabels:
+  - Security
+
+# Label to use when marking as stale
+staleLabel: "Will Not Review"
+
+pulls:
+  # Number of days of inactivity before an Issue or Pull Request becomes stale
+  daysUntilStale: 0
+
+  # Number of days of inactivity before a Pull Request with the stale label is closed.
+  # Set to false to disable. If disabled, issues still need to be closed manually,
+  # but will remain marked as stale.
+  daysUntilClose: 1
+
+  # Comment to post when marking as stale. Set to `false` to disable
+  markComment: >
+    Note that this repo is no longer maintained and this PR will not be reviewed.
+    Prefer the [official JavaScript API library](https://github.com/Shopify/shopify-api-js).
+    If you're still wanting to use Koa, see
+    [simple-koa-shopify-auth](https://github.com/TheSecurityDev/simple-koa-shopify-auth)
+    for a potential community solution.
+
+issues:
+  # Number of days of inactivity before an Issue or Pull Request becomes stale
+  daysUntilStale: 0
+
+  # Number of days of inactivity before an Issue with the stale label is closed.
+  # Set to false to disable. If disabled, issues still need to be closed manually,
+  # but will remain marked as stale.
+  daysUntilClose: 1
+
+  # Comment to post when marking as stale. Set to `false` to disable
+  markComment: >
+    Note that this repo is no longer maintained and this issue will not be reviewed.
+    Prefer the [official JavaScript API library](https://github.com/Shopify/shopify-api-js).
+    If you're still wanting to use Koa, see
+    [simple-koa-shopify-auth](https://github.com/TheSecurityDev/simple-koa-shopify-auth)
+    for a potential community solution.
