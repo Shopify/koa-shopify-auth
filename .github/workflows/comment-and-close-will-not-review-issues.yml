@@ -1,0 +1,29 @@
+name: Add comment and close will-not-review issues
+
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+  create-comment:
+    runs-on: ubuntu-latest
+    if: github.event.label.name == 'will not review'
+    steps:
+      - name: Add comment
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'create-comment'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            Note that this repo is no longer maintained and this issue will not be reviewed.
+            Prefer the [official JavaScript API library](https://github.com/Shopify/shopify-api-js).
+            If you still want to use Koa, see
+            [simple-koa-shopify-auth](https://github.com/TheSecurityDev/simple-koa-shopify-auth)
+            for a potential community solution.
+      - name: Close issue
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'close-issues'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          labels: 'will not review'
