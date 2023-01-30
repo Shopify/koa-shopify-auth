@@ -1,14 +1,20 @@
-name: Add comment and close will-not-review issues
+name: Add will-not-review label, comment, and close issue
 
 on:
   issues:
-    types: [labeled]
+    types: [opened]
 
 jobs:
-  create-comment:
+  auto-close-new-issue:
     runs-on: ubuntu-latest
-    if: github.event.label.name == 'will not review'
     steps:
+      - name: Add labels
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'add-labels'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
+          labels: 'will not review'
       - name: Add comment
         uses: actions-cool/issues-helper@v3
         with:
@@ -26,4 +32,5 @@ jobs:
         with:
           actions: 'close-issues'
           token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
           labels: 'will not review'
